@@ -94,6 +94,18 @@ export default class TrackerAPI {
             .catch(err => reject(err)))
     }
 
+    getUserLevelInfo(id_user) {
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-level/infoLevel/${id_user}`)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
     updateUserInfo(data, id_user) {
         const myHeaders= new Headers({"Content-Type": "application/json"})
         console.log(myHeaders)
@@ -112,10 +124,10 @@ export default class TrackerAPI {
 
     updateUserLevel(id_user) {
         const myHeaders= new Headers({"Content-Type": "application/json"})
-        const myInit= {method: 'POST',headers: myHeaders, body : JSON.stringify(id_user) ,cache: 'default' }
+        const myInit= {method: 'PUT',headers: myHeaders,cache: 'default' }
         return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-level/updateLevel/${id_user}`, myInit)
             .then(res => {
-                if (res.status === 201) {
+                if (res.status === 200) {
                     resolve()
                 } else {
                     reject(res.status)
@@ -126,11 +138,11 @@ export default class TrackerAPI {
 
     updateUserTask(id_user) {
         const myHeaders= new Headers({"Content-Type": "application/json"})
-        const myInit= {method: 'POST',headers: myHeaders, body : JSON.stringify(id_user) ,cache: 'default' }
+        const myInit= {method: 'PUT',headers: myHeaders ,cache: 'default' }
         return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-task/updateTask/${id_user}`, myInit)
             .then(res => {
-                if (res.status === 201) {
-                    resolve()
+                if (res.status === 200) {
+                    resolve(res.json())
                 } else {
                     reject(res.status)
                 }

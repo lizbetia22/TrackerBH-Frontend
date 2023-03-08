@@ -5,7 +5,7 @@
         <button type="button" class="btn info" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.6.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.8-.252 1.465-.598l.088-.416c-.2.6-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
             </svg>
         </button>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -43,37 +43,37 @@
                         <div class="form-group inputCompte">
                             <label for="name">Prénom</label>
                             <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Votre Prenom">
-                            <div id="valid1"></div>
+                            <div id="validName"></div>
                         </div>
                         <div class="form-group inputCompte">
                             <label for="lastname">Nom</label>
                             <input type="text" class="form-control" id="lastname" aria-describedby="lastname" placeholder="Votre Nom">
-                            <div id="valid2"></div>
+                            <div id="validLastName"></div>
                         </div>
                         <div class="form-group inputCompte">
                             <label for="nickname">Pseudonyme</label>
                             <input type="nickname" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Votre pseudo">
-                            <div id="valid3"></div>
+                            <div id="validNick"></div>
                         </div>
                         <div class="form-group inputCompte">
                             <label for="age">Age</label>
                             <input type="number" class="form-control" id="age" aria-describedby="age" placeholder="Votre age">
-                            <div id="valid4"></div>
+                            <div id="validAge"></div>
                         </div>
                         <div class="form-group inputCompte">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="Votre email">
-                            <div id="valid5"></div>
+                            <div id="validEmail"></div>
                         </div>
                         <div class="form-group inputCompte">
                             <label for="password">Mot de passe</label>
                             <input type="password" class="form-control" id="password" placeholder="Mot de passe">
-                            <div id="valid6"></div>
+                            <div id="validPassword"></div>
                         </div>
                         <div class="form-group inputCompte">
                             <label for="password1">Confirmation de mot de passe</label>
                             <input type="password" class="form-control" id="password1" placeholder="Mot de passe">
-                            <div id="valid7"></div>
+                            <div id="validPasswordConfirm"></div>
                         </div>
                         <div class="col d-flex justify-content-center">
                             <button onclick="InscrireController.createProfile()" type="submit" class="btn navBar create">Créer votre compte</button>

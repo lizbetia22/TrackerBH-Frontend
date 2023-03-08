@@ -7,7 +7,7 @@ class HomePageController extends BaseController {
         this.trackerModel = new trackerModel()
         this.userLevelName();
         this.setNickname();
-        this.userLevelTask();
+        this.userTaskName();
     }
 
     async setNickname() {
@@ -32,7 +32,7 @@ class HomePageController extends BaseController {
         }
     }
 
-    async userLevelTask() {
+    async userTaskName() {
         let card = document.getElementById('cardTask')
         let content = ''
         try {
@@ -54,7 +54,7 @@ class HomePageController extends BaseController {
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="checkbox" id="check" class="check">
+                                    <input type="checkbox"  class="check">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clock timeBtn" viewBox="0 0 16 16">
                                   <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
                                   <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
@@ -68,79 +68,55 @@ class HomePageController extends BaseController {
         card.innerHTML = content
     }
 
-    nextLevel(){
-        let numberOfCheckboxChecked = 0;
-        document.querySelectorAll('.check').forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                if (checkbox.checked) {
-                    numberOfCheckboxChecked++;
-                } else {
-                    numberOfCheckboxChecked--;
-                }
-            });
-        });
-
-        document.querySelector('.nextLevel').addEventListener('click', async () => {
-            const totalNumberOfCheckBox = document.querySelectorAll('.check').length;
-
-            const numberOfChecked = document.querySelectorAll('.check:checked').length;
-            if (numberOfChecked === totalNumberOfCheckBox) {
-                const userLevel = await this.trackerModel.getLevelUserId(decodeToken().id_user);
-               // const newLevel = userLevel.id_level + 1;
-                await this.trackerModel.updateLevel(decodeToken().id_user); //newLevel);
-                await this.trackerModel.updateTask(decodeToken().id_user);
-                console.log('Next level unlocked!');
-            } else {
-                console.log('Please complete all tasks before unlocking the next level.');
+    async nextLevel() {
+        let checkBoxes = document.querySelectorAll('.check')
+        let allChecked = true;
+        for (let i = 0; i < checkBoxes.length; i++) {
+            if (!checkBoxes[i].checked) {
+              allChecked = false;
+                break;
             }
-        });
+        }
+        if (allChecked && checkBoxes.length > 0) {
+            let id_user = decodeToken().id_user
+            await this.trackerModel.updateLevel(id_user);
+            this.userLevelName();
+            await this.trackerModel.updateTask(id_user);
+            this.userTaskName();
+            checkBoxes.forEach((checkBox) => {
+                checkBox.checked = false;
+            });
+            this.lastLevelAlert();
+
+        } else {
+            document.getElementById("alertLevel").innerHTML = `<div class="alert alert-danger" role="alert">
+                                                          Not all checkboxes are checked
+                                                      </div>`;
+            setTimeout(() => {
+                document.getElementById("alertLevel").style.display = "none";
+            }, 1000);
+            document.getElementById("alertLevel").style.display = "block"; // Reset the alert message
+        }
 
     }
 
+    async lastLevelAlert(){
+        let currentLevel = await this.trackerModel.getUserLevelInfo(decodeToken().id_user)
+        if (currentLevel && currentLevel.id_level === 9) {
+            document.getElementById("lastLevel").innerHTML = `<div class="alert alert-warning" role="alert">
+                                                      This is the last bonus level! You have finished list!
+                                                  </div>`;
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            document.getElementById("lastLevel").innerHTML = "";
+        } else {
+            document.getElementById("lastLevel").innerHTML = "";
+        }
+    }
 
 
     //AIzaSyDrR0um2oFxgbiSNdgCbir4cG08LvzhHMM
     //AIzaSyDrR0um2oFxgbiSNdgCbir4cG08LvzhHMM
 
-    // select the button element
-  //  const button = document.querySelector('#get-events');
-
-// add an event listener to the button for click event
-//     button.addEventListener('click', () => {
-//     // make an API request to retrieve events
-//     fetch('/api/calendar/events')
-// .then(response => response.json())
-// .then(data => {
-//     // display the events in the front-end
-//     const eventList = document.querySelector('#event-list');
-//     eventList.innerHTML = '';
-//     data.forEach(event => {
-//     const eventItem = document.createElement('li');
-//     eventItem.innerText = `${event.start.dateTime} - ${event.summary}`;
-//     eventList.appendChild(eventItem);
-// });
-// })
-// .catch(error => console.error(error));
-// });
-
-
-// <ul id="event-list"></ul>
-// <button id="get-events" onClick="getCalendarEvents()">Get Events</button>
-// <script>
-// function getCalendarEvents() {
-//     fetch('/api/calendar/events').then(response => response.json())
-// .then(data => { const eventList = document.querySelector('#event-list');
-//     eventList.innerHTML = '';
-//     data.forEach(event => { const eventItem = document.createElement('li');
-//     eventItem.innerText = `${event.start.dateTime} - ${event.summary}`;
-//     eventList.appendChild(eventItem);
-// }
-// )
-// ;
-// })
-// .catch(error => console.error(error));
-// }
-// </script>
 }
 
 export default () => window.HomePageController = new HomePageController()

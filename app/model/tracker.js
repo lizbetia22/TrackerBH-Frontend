@@ -1,30 +1,32 @@
 import TrackerAPI from "../services/apiTracker.js"
 export default class trackerModel {
     constructor () {
-        // data-oriented service instanciations (ex: API)
         this.api = new TrackerAPI()
     }
-    async getTracker(mail_password) {
-            return await this.api.loginTracker(mail_password)
+    async getLogin(mail_password) {
+            let login = await this.api.loginTracker(mail_password)
+            return login
     }
 
-    async getProfile(dataUser) {
-            return await this.api.createUser(dataUser)
+    async createProfile(dataUser) {
+            let newProfile = await this.api.createUser(dataUser)
+            return newProfile
     }
 
     async getLevelUserId(id_user_level) {
         try {
-            return await this.api.getIdUserLevel(id_user_level)
+            let userLevelId = await this.api.getIdUserLevel(id_user_level)
+            return userLevelId
         } catch(e) {
             Error(e)
-            console.log(e)
             return undefined
         }
     }
 
     async getNameLevel(id_level) {
         try {
-            return await this.api.getLevelName(id_level)
+            let nameLevel = await this.api.getLevelName(id_level)
+            return nameLevel
         } catch(e) {
             Error(e)
             return undefined
@@ -33,17 +35,18 @@ export default class trackerModel {
 
     async getTaskUserId(id_user_task) {
         try {
-            return await this.api.getIdUserTask(id_user_task)
+            let taskUserId = await this.api.getIdUserTask(id_user_task)
+            return taskUserId
         } catch(e) {
             Error(e)
-            console.log(e)
             return undefined
         }
     }
 
     async getNameTask(id_level) {
         try {
-            return await this.api.getTaskName(id_level)
+            let taskName = await this.api.getTaskName(id_level)
+            return taskName
         } catch(e) {
             Error(e)
             return undefined
@@ -52,7 +55,18 @@ export default class trackerModel {
 
     async getUserInfo(id_user) {
         try {
-            return await this.api.getUserInfo(id_user)
+            let userInfo = await this.api.getUserInfo(id_user)
+            return userInfo
+        } catch(e) {
+            Error(e)
+            return undefined
+        }
+    }
+
+    async getUserLevelInfo(id_user) {
+        try {
+            let userLevel = await this.api.getUserLevelInfo(id_user)
+            return userLevel
         } catch(e) {
             Error(e)
             return undefined
@@ -60,15 +74,14 @@ export default class trackerModel {
     }
 
     async updateUser(data, id_user) {
-        //return await this.api.updateUserInfo(data, id_user)
-        let res = await this.api.updateUserInfo(data, id_user)
-        console.log(res)
-        return res;
+        let updatedUser = await this.api.updateUserInfo(data, id_user)
+        return updatedUser;
     }
 
     async updateLevel(id_user) {
         try {
-            return await this.api.updateUserLevel(id_user)
+        let updatedLevel = await this.api.updateUserLevel(id_user)
+            return updatedLevel;
         } catch(e) {
             Error(e)
             return undefined
@@ -77,7 +90,8 @@ export default class trackerModel {
 
     async updateTask(id_user) {
         try {
-            return await this.api.updateUserTask(id_user)
+            let updatedTask = await this.api.updateUserTask(id_user)
+            return updatedTask
         } catch(e) {
             Error(e)
             return undefined

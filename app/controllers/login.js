@@ -15,8 +15,8 @@ import trackerModel from "../model/tracker.js";
         this.elements = {
             email: document.getElementById('email'),
             password: document.getElementById('password'),
-            valid1: document.getElementById('valid1'),
-            valid2: document.getElementById('valid2')
+            valid1: document.getElementById('validEmail'),
+            valid2: document.getElementById('validPassword')
         };
 
     }
@@ -26,6 +26,7 @@ import trackerModel from "../model/tracker.js";
         alert.innerHTML = `<div class="alert alert-primary" role="alert">
     Votre compte a été créé avec succès
     </div>`
+        this.setTimeoutAlert('alert', 1500);
     }
 
     async getLogin(){
@@ -35,18 +36,23 @@ import trackerModel from "../model/tracker.js";
         } = this.elements;
         let data = { "email" : email.value, "password" : password.value}
         try {
-            this.validation()
-            let token = await this.trackerModel.getTracker(data)
-            sessionStorage.setItem('token', token.token)
-            navigate ('homePage');
-        } catch (e){
-            document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
+            let boolean = this.validation()
+            if(boolean === true) {
+                let token = await this.trackerModel.getLogin(data)
+                sessionStorage.setItem('token', token.token)
+                navigate('homePage');
+            } else {
+                document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
                                                                     Votre e-mail et votre mot de passe ne correspondent pas 
                                                                 </div>`
-            Object.values(this.elements).forEach(element => {
-                element.classList.remove('is-valid');
-                element.classList.add('is-invalid');
-            });
+                this.setTimeoutAlert('loginError', 1500);
+                Object.values(this.elements).forEach(element => {
+                    element.classList.remove('is-valid');
+                    element.classList.add('is-invalid');
+                });
+            }
+        } catch (e){
+
         }
     }
 
@@ -56,8 +62,6 @@ import trackerModel from "../model/tracker.js";
         } catch (e) {
             console.log(e)
         }
-        // ${userinfo.nickname}
-        // ${userinfo.age}
     }
 
     validation() {
@@ -71,10 +75,22 @@ import trackerModel from "../model/tracker.js";
 
         let boolean = true;
 
-        if (email.value.length < 2) {
+        if(!email.value.match(emailFormat)) {
+            email.classList.add('is-valid')
+            email.classList.add('is-invalid')
+            valid1.innerHTML = `<h5 style="color: red; font-size: 12px">Votre email a incorrect value<h5/>`
+            boolean = false
+
+        } else{
+            email.classList.add('is-valid')
+            email.classList.remove('is-invalid')
+            valid1.innerHTML = ``
+        }
+
+        if (email.value.length < 8) {
             email.classList.remove('is-valid')
             email.classList.add('is-invalid')
-            valid1.innerHTML = `<h5 style="color: red; font-size: 12px">Incorrect value (minimum 2 caractères)<h5/>`
+            valid1.innerHTML = `<h5 style="color: red; font-size: 12px">Incorrect value (minimum 8 caractères)<h5/>`
             boolean = false
 
         } else {
@@ -93,18 +109,6 @@ import trackerModel from "../model/tracker.js";
             password.classList.add('is-valid')
             password.classList.remove('is-invalid')
             valid2.innerHTML = ``
-        }
-
-        if(!email.value.match(emailFormat)) {
-            email.classList.add('is-valid')
-            email.classList.add('is-invalid')
-            valid1.innerHTML = `<h5 style="color: red; font-size: 12px">Votre email a incorrect value<h5/>`
-            boolean = false
-
-        } else{
-            email.classList.add('is-valid')
-            email.classList.remove('is-invalid')
-            valid1.innerHTML = ``
         }
 
         return boolean
