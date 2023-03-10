@@ -9,9 +9,9 @@ import trackerModel from "../model/tracker.js";
         if(window.displayDone){
             this.createdDone();
         }
-        if (sessionStorage.getItem("token")) {
-            this.userInfo();
-        }
+        // if (sessionStorage.getItem("token")) {
+        //     this.userInfo();
+        // }
         this.elements = {
             email: document.getElementById('email'),
             password: document.getElementById('password'),
@@ -56,13 +56,13 @@ import trackerModel from "../model/tracker.js";
         }
     }
 
-    async userInfo(){
-        try {
-            await this.trackerModel.getUserInfo(decodeToken().id_user)
-        } catch (e) {
-            console.log(e)
-        }
-    }
+    // async userInfo(){
+    //     try {
+    //         await this.trackerModel.getUserInfo(decodeToken().id_user)
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }
 
     validation() {
         const {

@@ -150,4 +150,83 @@ export default class TrackerAPI {
             .catch(err => reject(err)))
     }
 
+    getIdTask(id_user, id_task) {
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-task/getIdTask/${id_user}/${id_task}`)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
+    updateCheckBox(id_user, id_task) {
+        const myHeaders= new Headers({"Content-Type": "application/json"})
+        const myInit= {method: 'PUT', headers: myHeaders ,cache: 'default' }
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-task/updateCheckBox/${id_user}/${id_task}`, myInit)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
+    nextLevel(id_user) {
+        const myHeaders= new Headers({"Content-Type": "application/json"})
+        const myInit= {method: 'PUT', headers: myHeaders ,cache: 'default' }
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-level/nextLevel/${id_user}`, myInit)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
+    nextTask(id_user, id_task) {
+        const myHeaders= new Headers({"Content-Type": "application/json"})
+        const myInit= {method: 'PUT', headers: myHeaders ,cache: 'default' }
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-task/nextTasks/${id_user}/${id_task}`, myInit)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
+    tasksOfLevel(id_user) {
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-task/tasksOfLevel/${id_user}`)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
+    nameTask(id_task) {
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-task/get-task/${id_task}`)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
 }
+

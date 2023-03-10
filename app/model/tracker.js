@@ -98,4 +98,63 @@ export default class trackerModel {
         }
     }
 
+    async getIdTask(id_user, id_task) {
+        try {
+            let task = await this.api.getIdTask(id_user, id_task)
+            return task
+        } catch(e) {
+            Error(e)
+            return undefined
+        }
+    }
+
+    async updateCheckBox(id_user, id_task) {
+        try {
+            let updateCheckBox = await this.api.updateCheckBox(id_user, id_task)
+            return updateCheckBox
+        } catch(e) {
+            Error(e)
+            return undefined
+        }
+    }
+
+    async setNextLevel (id_user) {
+        try {
+            let nextLevel = await this.api.nextLevel(id_user)
+            return nextLevel
+        } catch(e) {
+            Error(e)
+            return undefined
+        }
+    }
+
+    async setNextTasks (id_user, id_task) {
+        try {
+            let nextTask = await this.api.nextTask(id_user, id_task)
+            return nextTask
+        } catch(e) {
+            Error(e)
+            return undefined
+        }
+    }
+
+    async getTasksOfLevel (id_user) {
+        try {
+            let nextTask = await this.api.tasksOfLevel(id_user)
+            return nextTask
+        } catch(e) {
+            Error(e)
+            return undefined
+        }
+    }
+
+    async getNameTasks (id_task) {
+        try {
+            let nextTask = await this.api.nameTask(id_task)
+            return nextTask
+        } catch(e) {
+            Error(e)
+            return undefined
+        }
+    }
 }
