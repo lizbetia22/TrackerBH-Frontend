@@ -163,7 +163,18 @@ background-color: #7e57c2;
     transition-duration: .25s;
 }
 .menu__item:hover {
+    color: #7e57c2;
     background-color: #CFD8DC;
+}
+.menu__item[disabled] {
+    color: #969595;
+    cursor: pointer;
+}
+
+.menu__item[disabled]:hover {
+    background-color: #b6b5b5;
+    color: #606060;
+    cursor: pointer;
 }
 
 .img__item {

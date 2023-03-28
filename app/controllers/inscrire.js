@@ -36,7 +36,8 @@ class InscrireController extends BaseController {
 
                 await this.trackerModel.createProfile(data)
                 localStorage.setItem("isRegistered", true);
-                window.displayDone = true
+                //window.displayDone = true
+
                 navigate('login')
             }
         } catch (e) {

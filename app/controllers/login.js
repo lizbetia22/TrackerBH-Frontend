@@ -5,13 +5,8 @@ import trackerModel from "../model/tracker.js";
     constructor() {
         super();
         this.trackerModel = new trackerModel();
+        this.createdDone()
 
-        if(window.displayDone){
-            this.createdDone();
-        }
-        // if (sessionStorage.getItem("token")) {
-        //     this.userInfo();
-        // }
         this.elements = {
             email: document.getElementById('email'),
             password: document.getElementById('password'),
@@ -21,12 +16,22 @@ import trackerModel from "../model/tracker.js";
 
     }
 
+     logOut() {
+         sessionStorage.clear()
+         navigate('login')
+     }
+
     createdDone(){
-        let alert = document.getElementById('alert')
-        alert.innerHTML = `<div class="alert alert-primary" role="alert">
-    Votre compte a été créé avec succès
-    </div>`
-        this.setTimeoutAlert('alert', 1500);
+        let checkUser = localStorage.getItem('isRegistered')
+
+        if (checkUser) {
+            let alert = document.getElementById('alert')
+            alert.innerHTML = `<div class="alert alert-primary" role="alert">
+                                    Votre compte a été créé avec succès
+                               </div>`
+            this.setTimeoutAlert('alert', 1500);
+        }
+        localStorage.removeItem('isRegistered')
     }
 
     async getLogin(){
@@ -45,24 +50,43 @@ import trackerModel from "../model/tracker.js";
                 document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
                                                                     Votre e-mail et votre mot de passe ne correspondent pas 
                                                                 </div>`
+                document.getElementById("loginError").style.display = "block";
                 this.setTimeoutAlert('loginError', 1500);
                 Object.values(this.elements).forEach(element => {
                     element.classList.remove('is-valid');
                     element.classList.add('is-invalid');
                 });
             }
-        } catch (e){
+        } catch (error){
+            if (error.response && error.response.status === 401) {
 
+                Object.values(this.elements).forEach(element => {
+                    element.classList.remove('is-valid');
+                    element.classList.add('is-invalid');
+                });
+
+                document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
+                                                                    Votre e-mail ou votre mot de passe est incorrect.
+                                                                </div>`
+                document.getElementById("loginError").style.display = "block";
+                this.setTimeoutAlert('loginError', 1500);
+
+            } else {
+
+                Object.values(this.elements).forEach(element => {
+                    element.classList.remove('is-valid');
+                    element.classList.add('is-invalid');
+                });
+
+                document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
+                                                                   Votre e-mail ou votre mot de passe est incorrect.
+                                                                </div>`
+                document.getElementById("loginError").style.display = "block";
+                this.setTimeoutAlert('loginError', 1500);
+
+            }
         }
     }
-
-    // async userInfo(){
-    //     try {
-    //         await this.trackerModel.getUserInfo(decodeToken().id_user)
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
 
     validation() {
         const {
