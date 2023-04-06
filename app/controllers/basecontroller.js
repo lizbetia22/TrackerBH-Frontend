@@ -1,12 +1,37 @@
+import trackerModel from "../model/tracker.js";
+
 export default class BaseController {
     constructor() {
         this.setBackButtonView('index')
         this.setTimeoutAlert('alertBasic', 10)
+        this.trackerModel = new trackerModel()
+        this.isTokenValid()
     }
     setBackButtonView(view) {
         window.onpopstate = function() {
             navigate(view)
         }; history.pushState({}, '');
+    }
+
+    async isTokenValid() {
+        if (sessionStorage.getItem("token")) {
+            let jwt = sessionStorage.getItem("token")
+            let jwtdecode = decodeToken(jwt)
+            if (jwtdecode.exp <= Math.floor(Date.now() / 1000)) {
+                sessionStorage.removeItem("token")
+                navigate("login")
+                document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
+                                                                    Votre session est expiré
+                                                                </div>`
+                document.getElementById("loginError").style.display = "block";
+                this.setTimeoutAlert('loginError', 1500);
+            } else {
+                let new_token = await this.trackerModel.refreshToken(decodeToken().id_user)
+                sessionStorage.removeItem("token")
+                sessionStorage.setItem("token", new_token.token)
+
+            }
+        }
     }
 
     setTimeoutAlert(id, delay) {

@@ -124,7 +124,6 @@ class HomePageController extends BaseController {
                     allChecked = false
                 }
             }
-
             if (allChecked) {
                 await this.trackerModel.setNextLevel(decodeToken().id_user)
                 this.userLevelName();

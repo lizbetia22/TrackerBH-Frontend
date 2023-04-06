@@ -25,7 +25,7 @@ export default class trackerModel {
             return userInfo
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -35,7 +35,7 @@ export default class trackerModel {
             return userLevelId
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -45,7 +45,7 @@ export default class trackerModel {
             return nameLevel
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -55,7 +55,7 @@ export default class trackerModel {
             return userLevel
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -65,7 +65,7 @@ export default class trackerModel {
             return task
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -75,7 +75,7 @@ export default class trackerModel {
             return nextTask
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -85,7 +85,7 @@ export default class trackerModel {
             return nextTask
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -95,7 +95,7 @@ export default class trackerModel {
             return updateCheckBox
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -105,7 +105,7 @@ export default class trackerModel {
             return nextLevel
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -115,7 +115,7 @@ export default class trackerModel {
             return nextTask
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -125,7 +125,7 @@ export default class trackerModel {
             return levelnumber
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -135,7 +135,7 @@ export default class trackerModel {
             return tasknumber
         } catch(e) {
             Error(e)
-            return undefined
+            return e
         }
     }
 
@@ -145,7 +145,57 @@ export default class trackerModel {
             return taskTime
         } catch(e) {
             Error(e)
-            return undefined
+            return e
+        }
+    }
+
+    async createUserCalendarEvent (id_user, dataEvent) {
+        try {
+            let newEvent = await this.api.createCalendarEvent(id_user, dataEvent)
+            return newEvent
+        } catch(e) {
+            Error(e)
+            return e
+        }
+    }
+
+    async updateUserCalendarEvent (id_event_calendar, dataEvent) {
+        try {
+            let updatedEvent = await this.api.updateCalendarEvent(id_event_calendar, dataEvent)
+            return updatedEvent
+        } catch(e) {
+            Error(e)
+            return e
+        }
+    }
+
+    async getAllUserCalendarEvent (id_user) {
+        try {
+            let usersEvents = await this.api.getAllUsersCalendarEvent(id_user)
+            return usersEvents
+        } catch(e) {
+            Error(e)
+            return e
+        }
+    }
+
+    async getOneUserCalendarEvent (id_user, id_event_calendar) {
+        try {
+            let userEvent = await this.api.getOneUsersCalendarEvent(id_user, id_event_calendar)
+            return userEvent
+        } catch(e) {
+            Error(e)
+            return e
+        }
+    }
+
+    async refreshToken (id_user) {
+        try {
+            let refresh = await this.api.doRefreshToken(id_user)
+            return refresh
+        } catch(e) {
+            Error(e)
+            return e
         }
     }
 }

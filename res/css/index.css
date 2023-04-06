@@ -263,6 +263,30 @@ input[type=checkbox] {
     font-size: 25px;
 }
 
+#caleandar {
+    display: flex;
+    margin-top: 80px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.retourHome {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 100px;
+    padding-left: 15px;
+}
+
+.addEvent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
 
 
 
