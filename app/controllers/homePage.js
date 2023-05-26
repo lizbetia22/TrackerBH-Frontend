@@ -9,6 +9,8 @@ class HomePageController extends BaseController {
         this.userLevelName();
         this.setNickname();
         this.userTaskName();
+        this.buttonBonusEnable();
+        this.barMenu();
     }
 
     async setNickname() {
@@ -19,14 +21,57 @@ class HomePageController extends BaseController {
 
     async userLevelName() {
         try {
-            let getUserLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level
-            let getLevel = await this.trackerModel.getNameLevel(getUserLevel)
-            document.getElementById(`titleWeek`).innerHTML = `${getLevel.name_level}`
-            document.getElementById(`numberOflevel`).innerHTML = `<h5 style="text-align: center">niveau-${getLevel.id_level}</h5>`
-
+            let getUserLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+            let getLevel = await this.trackerModel.getNameLevel(getUserLevel);
+            document.getElementById(`titleWeek`).innerHTML = `${getLevel.name_level}`;
+            document.getElementById(`numberOflevel`).innerHTML = `<h4 style="text-align: center">Niveau - ${getLevel.id_level}</h4>`;
+            let progressPercentage = await this.calculateProgressPercentage();
+            await this.updateProgress(progressPercentage);
+            await this.updateRound(progressPercentage);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
+    }
+
+    async calculateProgressPercentage() {
+        try {
+            const level = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+            const totalLevels = 8;
+            const progressPercentage = Math.round((level / totalLevels) * 100);
+            return progressPercentage;
+        } catch (e) {
+            console.log(e);
+            return 0;
+        }
+    }
+
+    async updateProgress() {
+        const progressValue = await this.calculateProgressPercentage();
+        const progressBar = document.querySelector('.progress-bar');
+        progressBar.setAttribute('data-progress', progressValue);
+        progressBar.style.cssText = `--progress-value: ${progressValue}`;
+        var newStyle = `
+    @keyframes progress {
+        to {
+            --progress-value: ${progressValue};
+        }
+    }
+`;
+        var head = document.head || document.getElementsByTagName('head')[0];
+        var style = document.createElement('style');
+        style.id = 'progress-style';
+        style.appendChild(document.createTextNode(newStyle));
+        head.appendChild(style);
+
+        void progressBar.offsetWidth;
+
+        progressBar.classList.add('progress-animation');
+    }
+
+    updateRound(percentage){
+        const progressElement = document.querySelector('.progress-element');
+        const remainingPercentage = 100 - percentage;
+        progressElement.style.setProperty('--progress-value', remainingPercentage);
     }
 
     async userTaskName() {
@@ -137,7 +182,7 @@ class HomePageController extends BaseController {
                 this.isLevelCompleted()
             } else {
                 document.getElementById("alertLevel").innerHTML = `<div class="alert alert-danger" role="alert">
-                                                          Not all checkboxes are checked
+                                                          Vous n'avez pas fait tout les tâches
                                                       </div>`;
                 document.getElementById("alertLevel").style.display = "block";
                 setTimeout(() => {
@@ -152,17 +197,26 @@ class HomePageController extends BaseController {
 
     async lastLevelAlert() {
         let currentLevel = await this.trackerModel.getUserLevelInfo(decodeToken().id_user)
-        if (currentLevel && currentLevel.id_level === 9) {
-            navigate('bonus')
+        if (currentLevel && currentLevel.id_level === 8) {
             document.getElementById("lastLevel").innerHTML = `<div class="alert alert-warning" role="alert">
-                                                      This is the last bonus level! You have finished list!
+                                                      Felicitations! Vous avez debloqué niveau bonus!
                                                   </div>`;
+            document.getElementById("bonus").classList.remove("disabled");
             await new Promise(resolve => setTimeout(resolve, 2000));
             document.getElementById("lastLevel").innerHTML = "";
         } else {
             document.getElementById("lastLevel").innerHTML = "";
         }
     }
+
+    async buttonBonusEnable() {
+        let currentLevel = await this.trackerModel.getUserLevelInfo(decodeToken().id_user)
+        if (currentLevel && currentLevel.id_level === 8) {
+            document.getElementById("bonus").classList.remove("disabled");
+            document.getElementById("nextLevel").setAttribute("disabled", "disabled");
+        }
+    }
+
 
     async isLevelCompleted() {
         const getUserLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
@@ -178,15 +232,117 @@ class HomePageController extends BaseController {
 
     }
 
+    async barMenu() {
+        let getUserLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+        let getLevel = await this.trackerModel.getNameLevel(getUserLevel);
 
-    //key api calendrier
-    //AIzaSyDrR0um2oFxgbiSNdgCbir4cG08LvzhHMM
-    //client secret
-    //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
-    //client id
-    //608844270149-c9dubflpi2suv26bq4cmetfu9f8bjpns.apps.googleusercontent.com
+        const menuItems = document.querySelectorAll('.menu__item');
+
+        menuItems.forEach((menuItem, index) => {
+            if (index === 0) {
+                menuItem.setAttribute('id', 'level1');
+            }
+
+            menuItem.innerHTML = `${getLevel.name_level} ${index + 1}`;
+        });
+    }
 
 
+     toggleDarkMode() {
+         const lightSwitch = document.getElementById('lightSwitch');
+         const body = document.body;
+         const tables = document.querySelectorAll('table');
+
+         function applyDarkMode() {
+             document.querySelectorAll('.bg-light').forEach((element) => {
+                 element.style.backgroundColor = 'rgba(57, 2, 98, 0.85)';
+             });
+
+             document.querySelectorAll('.link-dark').forEach((element) => {
+                 element.classList.remove('link-dark');
+                 element.classList.add('text-white');
+             });
+
+             body.style.backgroundColor = 'rgba(57, 2, 98, 0.85)';
+
+             body.style.color = 'black';
+
+             tables.forEach((table) => {
+                 table.classList.add('table-dark');
+             });
+
+             if (!lightSwitch.checked) {
+                 lightSwitch.checked = true;
+             }
+
+             localStorage.setItem('lightSwitch', 'dark');
+         }
+
+         function applyLightMode() {
+             document.querySelectorAll('.bg-light').forEach((element) => {
+                 element.style.backgroundColor = '';
+             });
+
+             document.querySelectorAll('.text-white').forEach((element) => {
+                 element.classList.remove('text-white');
+                 element.classList.add('link-dark');
+             });
+
+             body.style.backgroundColor = '';
+
+             body.style.color = '';
+
+             tables.forEach((table) => {
+                 table.classList.remove('table-dark');
+             });
+
+             if (lightSwitch.checked) {
+                 lightSwitch.checked = false;
+             }
+
+             localStorage.setItem('lightSwitch', 'light');
+         }
+
+         function onToggleMode() {
+             if (lightSwitch.checked) {
+                 applyDarkMode();
+             } else {
+                 applyLightMode();
+             }
+         }
+
+         function getSystemDefaultTheme() {
+             const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
+             if (darkThemeMq.matches) {
+                 return 'dark';
+             }
+             return 'light';
+         }
+
+         function setup() {
+             const settings = localStorage.getItem('lightSwitch');
+             if (settings === null) {
+                 const defaultTheme = getSystemDefaultTheme();
+                 lightSwitch.checked = defaultTheme === 'dark';
+                 if (defaultTheme === 'dark') {
+                     applyDarkMode();
+                 } else {
+                     applyLightMode();
+                 }
+             } else {
+                 lightSwitch.checked = settings === 'dark';
+                 if (settings === 'dark') {
+                     applyDarkMode();
+                 } else {
+                     applyLightMode();
+                 }
+             }
+
+             lightSwitch.addEventListener('change', onToggleMode);
+         }
+
+         setup();
+     }
 }
 
 export default () => window.HomePageController = new HomePageController()

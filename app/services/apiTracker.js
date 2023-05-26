@@ -289,6 +289,20 @@ export default class TrackerAPI {
             .catch(err => reject(err)))
     }
 
+    deleteCalendarEvent(id_event_calendar) {
+        const myHeaders= new Headers({"Authorization":`Bearer ${sessionStorage.getItem("token")}`,"Access-Control-Allow-Origin":"*"})
+        const myInit= {method: 'DELETE', headers: myHeaders }
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/calendar-event/deleteUserEvent/${id_event_calendar}`, myInit)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
     doRefreshToken(id_user){
         const myHeaders= new Headers({"Authorization":`Bearer ${sessionStorage.getItem("token")}`,"Access-Control-Allow-Origin":"*"})
         const myInit= {headers: myHeaders }

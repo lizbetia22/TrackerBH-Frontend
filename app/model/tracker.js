@@ -169,6 +169,16 @@ export default class trackerModel {
         }
     }
 
+    async deleteEvent (id_event_calendar) {
+        try {
+            let deletedEvent = await this.api.deleteCalendarEvent(id_event_calendar)
+            return deletedEvent
+        } catch(e) {
+            Error(e)
+            return e
+        }
+    }
+
     async getAllUserCalendarEvent (id_user) {
         try {
             let usersEvents = await this.api.getAllUsersCalendarEvent(id_user)
@@ -191,8 +201,7 @@ export default class trackerModel {
 
     async refreshToken (id_user) {
         try {
-            let refresh = await this.api.doRefreshToken(id_user)
-            return refresh
+            return await this.api.doRefreshToken(id_user)
         } catch(e) {
             Error(e)
             return e

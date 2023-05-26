@@ -34,8 +34,22 @@
 </div>
 <div class="retourHome">
     <button type="button" class="btn navBar clendr" id="backhome" onclick="navigate('homePage')">Retour au page
-        principal
+        d'accueil
     </button>
+    <button type="button" class="btn navBar clendr"  onclick="navigate('bonus')">Test bonus
+    </button>
+</div>
+<div id="addedEvent"></div>
+<div id="updateEventAlert"></div>
+<div id="deleteEvent"></div>
+<div id="custom-alert" style="display: none;">
+    <div class="alert-content">
+        <p>Êtes-vous sûr de vouloir supprimer cet évènement ?</p>
+        <div class="btn-group">
+            <button class="btn btn-confirm">Oui</button>
+            <button class="btn btn-cancel">Annuler</button>
+        </div>
+    </div>
 </div>
 <div class="addEvent">
     <button type="button" class="btn navBar clendr" id="addevent" data-bs-toggle="modal"
@@ -55,10 +69,12 @@
                             <div class="mb-3">
                                 <label for="event-date" class="form-label">Date de l'événement</label>
                                 <input type="date" class="form-control" id="event-date" required>
+                                <div id="validDate"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="event-title" class="form-label">Titre de l'événement</label>
                                 <input type="text" class="form-control" id="event-title" required>
+                                <div id="validTitle"></div>
                             </div>
                         </form>
                     </section>
@@ -67,11 +83,42 @@
                     <button type="button" class="btn navBar info" onclick="CalendarController.createCalendarEvent()">
                         Ajouter
                     </button>
-                    <button type="button" class="btn navBar info" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font" id="exampleModalLabel2">Modifier votre événement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <section class="container">
+                    <h5 class="py-3">Votre événement</h5>
+                    <form id="event-forms">
+                        <div class="mb-3">
+                            <label for="event-date" class="form-label">Date de l'événement</label>
+                            <input type="date" class="form-control" id="update-date" required>
+                            <div id="validDates"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="event-title" class="form-label">Titre de l'événement</label>
+                            <input type="text" class="form-control" id="update-title" required>
+                            <div id="validTitles"></div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+            <div id="modal-update-footer" class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 <footer class="fixed-bottom navBar">
@@ -88,3 +135,4 @@
         </div>
     </div>
 </footer>
+

@@ -7,6 +7,7 @@ import trackerModel from "../model/tracker.js";
         this.trackerModel = new trackerModel();
         this.createdDone()
 
+
         this.elements = {
             email: document.getElementById('email'),
             password: document.getElementById('password'),
@@ -14,11 +15,41 @@ import trackerModel from "../model/tracker.js";
             valid2: document.getElementById('validPassword')
         };
 
+        if (sessionStorage.getItem("token")){
+            if (this.isTokenValidLogin()) {
+                this.isConnected();
+            }
+        }
     }
 
+     async isTokenValidLogin() {
+        try {
+            if (sessionStorage.getItem("token")) {
+                let jwt = sessionStorage.getItem("token")
+                let jwtdecode = decodeToken(jwt)
+                if (jwtdecode.exp <= Math.floor(Date.now() / 1000)) {
+                    sessionStorage.removeItem("token")
+                    return false
+                } else {
+                    let new_token = await this.model.refreshToken(decodeToken().id_user)
+                    sessionStorage.removeItem("token")
+                    sessionStorage.setItem("token", new_token.token)
+                    return true
+                }
+            }
+            return false
+        } catch (e) {
+            return false
+        }
+     }
+
+     async isConnected() {
+         navigate("homePage")
+     }
+
      logOut() {
-         sessionStorage.clear()
-         navigate('login')
+         sessionStorage.removeItem("token")
+         navigate("login")
      }
 
     createdDone(){

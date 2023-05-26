@@ -30,7 +30,6 @@ class InscrireController extends BaseController {
                 "nickname": nickname.value, "age": age.value,
                 "email": email.value, "password": password.value
             }
-
             let boolean =  this.validation()
             if(boolean === true){
 
@@ -52,7 +51,6 @@ class InscrireController extends BaseController {
                     element.classList.remove('is-valid');
                     element.classList.add('is-invalid');
                 });
-
             }
         }
 

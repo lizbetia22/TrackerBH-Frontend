@@ -1,6 +1,7 @@
 import trackerModel from "../model/tracker.js";
 
 export default class BaseController {
+    //server repond pas
     constructor() {
         this.setBackButtonView('index')
         this.setTimeoutAlert('alertBasic', 10)
@@ -33,15 +34,16 @@ export default class BaseController {
             }
         }
     }
-
     setTimeoutAlert(id, delay) {
         const element = document.getElementById(id);
         if (element) {
+            element.style.display = "block";
             setTimeout(function() {
                 element.style.display = "none";
             }, delay);
         }
     }
+
     validation() {
         let name = document.getElementById('name')
         let  lastName = document.getElementById('lastname')
