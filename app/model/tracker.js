@@ -29,12 +29,12 @@ export default class trackerModel {
         let updatedUser = await this.api.updateUserInfo(data, id_user)
         return updatedUser;
         } catch(e) {
-            Error(e)
-            return e
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
+            // Error(e)
+            // return e
+           navigate('login');
+           sessionStorage.removeItem('token');
+           localStorage.setItem('server error', "true")
+           throw new Error()
         }
     }
 
@@ -44,12 +44,12 @@ export default class trackerModel {
             let userInfo = await this.api.getUserInfo(id_user)
             return userInfo
         } catch(e) {
-            Error(e)
-            return e
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
+            // Error(e)
+            // return e
+           navigate('login');
+           sessionStorage.removeItem('token');
+           localStorage.setItem('server error', "true")
+           throw new Error()
         }
     }
 
@@ -60,10 +60,10 @@ export default class trackerModel {
         } catch(e) {
             Error(e)
             return e
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
+           // navigate('login');
+           // sessionStorage.removeItem('token');
+           // localStorage.setItem('server error', "true")
+           // throw new Error()
         }
     }
 
@@ -72,12 +72,12 @@ export default class trackerModel {
             let allLevels = await this.api.getAllLevels()
             return allLevels
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
-            Error(e)
-            return e
+            navigate('login');
+            sessionStorage.removeItem('token');
+            localStorage.setItem('server error', "true")
+            throw new Error()
+            // Error(e)
+            // return e
         }
     }
 
@@ -100,12 +100,12 @@ export default class trackerModel {
             let userLevel = await this.api.getUserLevelInfo(id_user)
             return userLevel
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
-            Error(e)
-            return e
+           navigate('login');
+           sessionStorage.removeItem('token');
+           localStorage.setItem('server error', "true")
+           throw new Error()
+            // Error(e)
+            // return e
         }
     }
 
@@ -114,10 +114,10 @@ export default class trackerModel {
             let task = await this.api.getIdTask(id_user, id_task)
             return task
         } catch(e) {
-        //     navigate('login');
-        //     sessionStorage.removeItem('token');
-        //     localStorage.setItem('server error', "true")
-        //     throw new Error()
+            // navigate('login');
+            // sessionStorage.removeItem('token');
+            // localStorage.setItem('server error', "true")
+            // throw new Error()
            Error(e)
            return e
         }
@@ -128,12 +128,12 @@ export default class trackerModel {
             let nextTask = await this.api.allTasksOfLevel(id_user)
             return nextTask
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
-            Error(e)
-            return e
+           navigate('login');
+           sessionStorage.removeItem('token');
+           localStorage.setItem('server error', "true")
+           throw new Error()
+            // Error(e)
+            // return e
         }
     }
 
@@ -142,12 +142,12 @@ export default class trackerModel {
             let nextTask = await this.api.nameTask(id_task)
             return nextTask
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
-            Error(e)
-            return e
+           navigate('login');
+           sessionStorage.removeItem('token');
+           localStorage.setItem('server error', "true")
+           throw new Error()
+            // Error(e)
+            // return e
         }
     }
 
@@ -156,12 +156,12 @@ export default class trackerModel {
             let updateCheckBox = await this.api.updateCheckBox(id_user, id_task)
             return updateCheckBox
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
-            Error(e)
-            return e
+           navigate('login');
+           sessionStorage.removeItem('token');
+           localStorage.setItem('server error', "true")
+           throw new Error()
+           // Error(e)
+            // return e
         }
     }
 
@@ -170,10 +170,10 @@ export default class trackerModel {
             let nextLevel = await this.api.nextLevel(id_user)
             return nextLevel
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
+           // navigate('login');
+           // sessionStorage.removeItem('token');
+           // localStorage.setItem('server error', "true")
+           // throw new Error()
             Error(e)
             return e
         }
@@ -184,10 +184,10 @@ export default class trackerModel {
             let nextTask = await this.api.nextTask(id_user, id_task)
             return nextTask
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
+           // navigate('login');
+           // sessionStorage.removeItem('token');
+           // localStorage.setItem('server error', "true")
+           //  throw new Error()
             Error(e)
             return e
         }
@@ -198,12 +198,12 @@ export default class trackerModel {
             let taskTime = await this.api.updateTaskTime(id_user, id_task)
             return taskTime
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
-           Error(e)
-           return e
+           navigate('login');
+          sessionStorage.removeItem('token');
+           localStorage.setItem('server error', "true")
+           throw new Error()
+           // Error(e)
+           // return e
         }
     }
 
@@ -212,18 +212,18 @@ export default class trackerModel {
             let newEvent = await this.api.createCalendarEvent(id_user, dataEvent)
             return newEvent
         } catch(e) {
-                // let modal = document.getElementById('exampleModal1');
-                // modal.classList.remove('show');
-                // modal.style.display = 'none';
-                // document.body.classList.remove('modal-open');
-                // let modalBackdrop = document.querySelector('.modal-backdrop');
-                // modalBackdrop.parentNode.removeChild(modalBackdrop);
-                // navigate('login');
-                // sessionStorage.removeItem('token');
-                // localStorage.setItem('server error', "true")
-                // throw new Error()
-            Error(e)
-            return e
+               let modal = document.getElementById('exampleModal1');
+               modal.classList.remove('show');
+               modal.style.display = 'none';
+               document.body.classList.remove('modal-open');
+               let modalBackdrop = document.querySelector('.modal-backdrop');
+               modalBackdrop.parentNode.removeChild(modalBackdrop);
+                navigate('login');
+               sessionStorage.removeItem('token');
+               localStorage.setItem('server error', "true")
+               throw new Error()
+            // Error(e)
+            // return e
         }
     }
 
@@ -231,6 +231,26 @@ export default class trackerModel {
         try {
             let updatedEvent = await this.api.updateCalendarEvent(id_event_calendar, dataEvent)
             return updatedEvent
+        } catch(e) {
+            let modal = document.getElementById('exampleModal1');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            let modalBackdrop = document.querySelector('.modal-backdrop');
+            modalBackdrop.parentNode.removeChild(modalBackdrop);
+            navigate('login');
+            sessionStorage.removeItem('token');
+            localStorage.setItem('server error', "true")
+            throw new Error()
+            // Error(e)
+            // return e
+        }
+    }
+
+    async deleteEvent (id_event_calendar) {
+        try {
+            let deletedEvent = await this.api.deleteCalendarEvent(id_event_calendar)
+            return deletedEvent
         } catch(e) {
             // let modal = document.getElementById('exampleModal1');
             // modal.classList.remove('show');
@@ -247,37 +267,17 @@ export default class trackerModel {
         }
     }
 
-    async deleteEvent (id_event_calendar) {
-        try {
-            let deletedEvent = await this.api.deleteCalendarEvent(id_event_calendar)
-            return deletedEvent
-        } catch(e) {
-        //     let modal = document.getElementById('exampleModal1');
-        //     modal.classList.remove('show');
-        //     modal.style.display = 'none';
-        //     document.body.classList.remove('modal-open');
-        //     let modalBackdrop = document.querySelector('.modal-backdrop');
-        //     modalBackdrop.parentNode.removeChild(modalBackdrop);
-        //     // navigate('login');
-        //     // sessionStorage.removeItem('token');
-        //     // localStorage.setItem('server error', "true")
-        //     throw new Error()
-            Error(e)
-            return e
-        }
-    }
-
     async getAllUserCalendarEvent (id_user) {
         try {
             let usersEvents = await this.api.getAllUsersCalendarEvent(id_user)
             return usersEvents
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
-            Error(e)
-            return e
+            navigate('login');
+            sessionStorage.removeItem('token');
+            localStorage.setItem('server error', "true")
+            throw new Error()
+            // Error(e)
+            // return e
         }
     }
 
@@ -286,12 +286,12 @@ export default class trackerModel {
             let userEvent = await this.api.getOneUsersCalendarEvent(id_user, id_event_calendar)
             return userEvent
         } catch(e) {
-            // navigate('login');
-            // sessionStorage.removeItem('token');
-            // localStorage.setItem('server error', "true")
-            // throw new Error()
-            Error(e)
-            return e
+            navigate('login');
+            sessionStorage.removeItem('token');
+            localStorage.setItem('server error', "true")
+            throw new Error()
+            // Error(e)
+            // return e
         }
     }
 
@@ -299,9 +299,8 @@ export default class trackerModel {
         try {
             return await this.api.doRefreshToken(id_user)
         } catch(e) {
-            Error(e)
-            return e
-            // throw new Error()
-        }
-    }
+            // Error(e)
+            // return e
+            throw new Error()
+        }    }
 }
