@@ -45,16 +45,16 @@ import trackerModel from "../model/tracker.js";
              let boolean = this.validation()
              if (boolean === false) {
                  await this.validation();
-                 document.getElementById("alertError").innerHTML = `<div class="alert alert-danger" role="alert">
+                 document.getElementById("alertError").innerHTML = `<div class="alert my-alert-danger" role="alert">
                                                                        Les données saisies sont incorrectes
                                                                     </div>`
-                 this.setTimeoutAlert('alertError', 1000);
+                 this.setTimeoutAlert('alertError', 2000);
              } else {
                  await this.validation();
-                 document.getElementById("alertOkay").innerHTML = `<div class="alert alert-success" role="alert">
+                 document.getElementById("alertOkay").innerHTML = `<div class="alert my-alert-sucess" role="alert">
                                                                         Votre compte a été modifié avec succès
                                                                     </div>`
-                 this.setTimeoutAlert('alertOkay', 1000);
+                 this.setTimeoutAlert('alertOkay', 2000);
                  await this.trackerModel.updateUser(data, decodeToken().id_user)
              }
 
@@ -64,10 +64,10 @@ import trackerModel from "../model/tracker.js";
              await this.validation();
              let error = document.getElementById('alertEmail')
              if (e === 401) {
-                 error.innerHTML = `<div class="alert alert-danger" role="alert">
+                 error.innerHTML = `<div class="alert my-alert-danger" role="alert">
                Il existe déjà un compte avec cet email
 </div>`
-                 this.setTimeoutAlert('alertEmail', 1000);
+                 this.setTimeoutAlert('alertEmail', 2000);
                  Object.values(this.elements).forEach(element => {
                      element.classList.remove('is-valid');
                      element.classList.add('is-invalid');

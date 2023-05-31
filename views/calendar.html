@@ -2,7 +2,7 @@
     <nav class="navbar navBar">
         <span class="titleBar"> <a>
             <img src="res/img/tracker.png" height="55" width="55" class="logo"></a>Tracker BH</span>
-        <button type="button" class="btn info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" id="infoButton" class="infoModal btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-info-circle"
                  viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -17,19 +17,28 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        regle 1
-                        regle 2
-                        regle 3
-                        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                        <ul>
+                            <li>L'application comporte 8 niveaux.</li>
+                            <li>Il y a 7 tâches disponibles pour chaque niveau.</li>
+                            <li>Vous ne pouvez pas consacrer moins d'une minute à la réalisation d'une tâche.</li>
+                            <li>Vous ne pouvez accéder au niveau suivant que si toutes les tâches du niveau ont été accomplies.</li>
+                            <li>Si vous avez débloqué le niveau 8, vous avez accès au niveau "Bonus" et le bouton "Prochain niveau" n'est plus disponible.</li>
+                            <li>Vous pouvez suivre votre progression en utilisant le menu de la page d'accueil.</li>
+                            <li>Pour gérer vos tâches, vous pouvez utiliser le calendrier où vous pouvez ajouter/modifier/supprimer un événement.</li>
+                        </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn navBar info" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 </div>
+<div id="catchError"></div>
+<div id="addedEvent"></div>
+<div id="updateEventAlert"></div>
+<div id="deleteEvent"></div>
 <div id="caleandar">
 </div>
 <div class="retourHome">
@@ -39,9 +48,6 @@
     <button type="button" class="btn navBar clendr"  onclick="navigate('bonus')">Test bonus
     </button>
 </div>
-<div id="addedEvent"></div>
-<div id="updateEventAlert"></div>
-<div id="deleteEvent"></div>
 <div id="custom-alert" style="display: none;">
     <div class="alert-content">
         <p>Êtes-vous sûr de vouloir supprimer cet évènement ?</p>

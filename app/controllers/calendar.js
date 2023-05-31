@@ -13,8 +13,6 @@ class CalendarController extends BaseController {
         let calendar = document.getElementById('caleandar')
         let eventsReceive = await this.trackerModel.getAllUserCalendarEvent(decodeToken().id_user)
         let events = []
-        console.log(eventsReceive)
-        //
         eventsReceive.forEach(event => {
 
             let date = new Date(event.Date)
@@ -33,7 +31,6 @@ class CalendarController extends BaseController {
             DateTimeFormat: 'mmm, yyyy',  //(string - dateformat) format previously mentioned date is shown in.
             DatetimeLocation: '',         //(string - element) where to display previously mentioned date, if not in default position.
             EventClick:   async function (event) {
-                console.log(event)
                 let id_event = event
                 const modal = document.getElementById('exampleModal2');
                 document.getElementById('modal-update-footer').innerHTML = `<button type="button" class="btn navBar info" onclick="CalendarController.updateEventCalendar(${id_event})">
@@ -119,43 +116,53 @@ class CalendarController extends BaseController {
     }
 
 
-    createCalendarEvent(){
-        let title = document.getElementById(`event-title`).value
-        let date =  document.getElementById(`event-date`).value
-        let alert = document.getElementById('addedEvent')
+    async createCalendarEvent() {
+        let title = document.getElementById(`event-title`).value;
+        let date = document.getElementById(`event-date`).value;
+        let alert = document.getElementById('addedEvent');
+        let catchError = document.getElementById('catchError');
 
-        let boolean =  this.validationCalendar()
+        // try{
+        let boolean = this.validationCalendar();
         if (boolean === true) {
             document.getElementById(`event-date`).classList.remove('is-valid');
             document.getElementById(`event-title`).classList.remove('is-valid');
             document.getElementById(`event-date`).classList.remove('is-invalid');
             document.getElementById(`event-title`).classList.remove('is-invalid');
-            let datefinal = new Date(date)
-            let data = {title_event:title, date_event: datefinal}
-            this.trackerModel.createUserCalendarEvent(decodeToken().id_user, data)
-            this.initCalendar()
+            let datefinal = new Date(date);
+            let data = { title_event: title, date_event: datefinal };
 
-            let modal = document.getElementById('exampleModal1');
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            let modalBackdrop = document.querySelector('.modal-backdrop');
-            modalBackdrop.parentNode.removeChild(modalBackdrop);
 
-            alert.innerHTML = `<div class="alert alert-primary" role="alert">
-  Votre evenement été ajouté avec success
-</div>`
-            this.setTimeoutAlert('addedEvent', 1500);
+                await this.trackerModel.createUserCalendarEvent(decodeToken().id_user, data);
+                this.initCalendar();
 
+                let modal = document.getElementById('exampleModal1');
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                let modalBackdrop = document.querySelector('.modal-backdrop');
+                modalBackdrop.parentNode.removeChild(modalBackdrop);
+
+                alert.innerHTML = `<div class="alert my-alert-sucess" role="alert">
+        Votre événement a été ajouté avec succès
+      </div>`;
+                this.setTimeoutAlert('addedEvent', 1500);
+      //       } catch (error) {
+      //           catchError.innerHTML = `<div class="alert my-alert-danger" role="alert">
+      //         Erreur Serveur
+      // </div>`;
+      //           this.setTimeoutAlert('catchError', 1500);
+      //           console.log('Create calendar event error'+ error)
+      //       }
         }
 
-        document.getElementById(`event-title`).value = ``
-        document.getElementById(`event-date`).value = ``
-
+        document.getElementById(`event-title`).value = '';
+        document.getElementById(`event-date`).value = '';
     }
+
+
     async updateEventCalendar(event) {
         try {
-            console.log(event);
 
             let alert = document.getElementById('updateEventAlert');
             let title = document.getElementById(`update-title`);
@@ -170,10 +177,8 @@ class CalendarController extends BaseController {
             if (boolean === true) {
                 document.getElementById(`update-date`).classList.remove('is-valid');
                 document.getElementById(`update-title`).classList.remove('is-valid');
-                document.getElementById(`event-date`).classList.remove('is-valid');
-                document.getElementById(`event-title`).classList.remove('is-valid');
-                document.getElementById(`event-date`).classList.remove('is-invalid');
-                document.getElementById(`event-title`).classList.remove('is-invalid');
+                document.getElementById(`update-date`).classList.remove('is-invalid');
+                document.getElementById(`update-title`).classList.remove('is-invalid');
                 await this.trackerModel.updateUserCalendarEvent(event, data);
                 this.initCalendar();
 
@@ -184,7 +189,7 @@ class CalendarController extends BaseController {
                 let modalBackdrop = document.querySelector('.modal-backdrop');
                 modalBackdrop.parentNode.removeChild(modalBackdrop);
 
-                alert.innerHTML = `<div class="alert alert-primary" role="alert">
+                alert.innerHTML = `<div class="alert  my-alert-sucess" role="alert">
                 Votre evenement a été modifié avec succès
             </div>`;
                 this.setTimeoutAlert('updateEventAlert', 1500);
@@ -192,46 +197,64 @@ class CalendarController extends BaseController {
                 date.value = ``
             }
         } catch (error) {
-            alert.innerHTML = `<div class="alert alert-danger" role="alert">
+            alert.innerHTML = `<div class="alert my-alert-danger" role="alert">
                 Une erreur est survenue 
             </div>`;
             this.setTimeoutAlert('updateEventAlert', 1500);
-            console.error(error);
+            console.error('Update calendar event error' + error);
         }
     }
 
-    async getInputValue(event){
-        const calendarInfo = await this.trackerModel.getOneUserCalendarEvent(decodeToken().id_user, event)
-        let title = document.getElementById(`update-title`);
-        let date = document.getElementById(`update-date`);
-        title.value = calendarInfo.title_event
+    async getInputValue(event) {
+        try {
+            const calendarInfo = await this.trackerModel.getOneUserCalendarEvent(decodeToken().id_user, event);
+            let title = document.getElementById(`update-title`);
+            let date = document.getElementById(`update-date`);
+            title.value = calendarInfo.title_event;
 
-        let dates = calendarInfo.date_event
-        const formattedDates = new Date(dates).toISOString().split('T')[0];
+            let dates = calendarInfo.date_event;
+            const formattedDates = new Date(dates).toISOString().split('T')[0];
 
-        date.value = formattedDates
-    }
-
-    async deleteCalendarEvent(event){
-        const calendarInfo = await this.trackerModel.deleteEvent(event)
-        const alert = document.getElementById('deleteEvent')
-
-        if(calendarInfo){
-            this.initCalendar()
-
-            let modal = document.getElementById('exampleModal2');
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            let modalBackdrop = document.querySelector('.modal-backdrop');
-            modalBackdrop.parentNode.removeChild(modalBackdrop);
-
-            alert.innerHTML = `<div class="alert alert-primary" role="alert">
-                Votre evenement a été supprimé avec succès
-            </div>`;
-            this.setTimeoutAlert('deleteEvent', 1500);
+            date.value = formattedDates;
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Erreur Serveur
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Input calendar error' + error);
         }
     }
+
+
+    async deleteCalendarEvent(event) {
+        // try {
+            const calendarInfo = await this.trackerModel.deleteEvent(event);
+            const alert = document.getElementById('deleteEvent');
+
+            if (calendarInfo) {
+                this.initCalendar();
+
+                let modal = document.getElementById('exampleModal2');
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                let modalBackdrop = document.querySelector('.modal-backdrop');
+                modalBackdrop.parentNode.removeChild(modalBackdrop);
+
+                alert.innerHTML = `<div class="alert my-alert-sucess" role="alert">
+        Votre événement a été supprimé avec succès
+      </div>`;
+                this.setTimeoutAlert('deleteEvent', 1500);
+            }
+      //   } catch (error) {
+      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+      //         Erreur Serveur
+      // </div>`;
+      //       this.setTimeoutAlert('catchError', 1500);
+      //       console.error('An error occurred while deleting the calendar event', error);
+      //   }
+    }
+
 
 
     alertConfirmDelete(event) {
@@ -239,18 +262,18 @@ class CalendarController extends BaseController {
         const confirmButton = document.querySelector('#custom-alert .btn-confirm');
         const cancelButton = document.querySelector('#custom-alert .btn-cancel');
 
-        customAlert.style.pointerEvents = 'auto'; // Enable pointer events on the alert
+        customAlert.style.pointerEvents = 'auto';
 
         confirmButton.addEventListener('click', () => {
             this.deleteCalendarEvent(event);
-            customAlert.style.display = 'none'; // Hide the custom alert
+            customAlert.style.display = 'none';
         });
 
         cancelButton.addEventListener('click', () => {
-            customAlert.style.display = 'none'; // Hide the custom alert
+            customAlert.style.display = 'none';
         });
 
-        customAlert.style.display = 'flex'; // Show the custom alert
+        customAlert.style.display = 'flex';
     }
 
 

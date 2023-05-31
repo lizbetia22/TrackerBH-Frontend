@@ -376,6 +376,77 @@ input[type=checkbox] {
     color: #232222;
 }
 
+.infoModal.btn {
+    margin-left: 10px !important;
+    color: white !important;
+    border: none !important;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.infoModal.btn:hover {
+    background-color: #c9bebe !important;
+    color: #232222 !important;
+}
+
+
+.my-alert-danger{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgba(117, 13, 215, 0.8);
+    color: #e82323;
+    height: 55px;
+    width: 800px;
+    background-color: rgba(225, 204, 241, 0.59);
+    margin: 5px auto;
+}
+
+.my-alert-sucess{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgba(117, 13, 215, 0.8);
+    color: #4d4a4a;
+    height: 55px;
+    width: 800px;
+    background-color: rgba(225, 204, 241, 0.59);
+    margin: 5px auto;
+}
+
+.titleBonus{
+    font-family: "Century Gothic";
+    font-size: 30px;
+    text-align: center;
+    text-shadow: 1px 1px 1px #969494;
+}
+
+.titleFin{
+    font-family: "Century Gothic", cursive;
+    font-size: 20px;
+    text-align: center;
+}
+
+#homeBonus {
+    position: fixed;
+    bottom: 45px;
+    right: 1px;
+}
+
+.bonusCard {
+    background-color: #f5f5f5;
+    width: 1400px;
+    height: 450px;
+}
+
+.fontBonus{
+    text-decoration: underline;
+    color: black;
+    font-family: "Century Gothic";
+}
+
+
+
+
 
 
 

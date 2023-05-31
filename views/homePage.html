@@ -7,16 +7,16 @@
             <label class="menu__btn" for="menu__toggle">
                 <span></span>
             </label>
-            <ul class="menu__box">
-                <li><a class="menu__item" ></a></li>
-                <li><a class="menu__item" ></a></li>
-                <li><a class="menu__item" ></a></li>
-                <li><a class="menu__item" ></a></li>
-                <li><a class="menu__item" ></a></li>
-                <li><a class="menu__item" ></a></li>
-                <li><a class="menu__item" ></a></li>
-                <li><a class="menu__item" ></a></li>
-                <li><a class="img__item " ><img src="res/img/tracker.png"  height="60" width="60" class="logo"></a></li>
+            <ul id="menu_levels" class="menu__box">
+<!--                <li><a class="menu__item" ></a></li>-->
+<!--                <li><a class="menu__item" ></a></li>-->
+<!--                <li><a class="menu__item" ></a></li>-->
+<!--                <li><a class="menu__item" ></a></li>-->
+<!--                <li><a class="menu__item" ></a></li>-->
+<!--                <li><a class="menu__item" ></a></li>-->
+<!--                <li><a class="menu__item" ></a></li>-->
+<!--                <li><a class="menu__item" ></a></li>-->
+<!--                <li><a class="img__item " ><img src="res/img/tracker.png"  height="60" width="60" class="logo"></a></li>-->
             </ul>
         </div>
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0"></ul>
@@ -32,7 +32,7 @@
                 <span id="nickname"></span>
             </a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item clickInscrire" onclick="navigate('update.user')">Profil d'action</a></li>
+                <li><a class="dropdown-item clickInscrire" onclick="navigate('update.user')">Mon profil</a></li>
                 <li class="nav-item">
                     <a id='logout' class="nav-link clickDrop t" onclick="LoginController.logOut()">Se déconnecter</a>
                 </li>
@@ -70,14 +70,15 @@
 <div>
     <h3 class="col d-flex justify-content-center font weekTitle" id="titleWeek"></h3>
 </div>
+<div id="catchError"></div>
+<div id="loginAlert"></div>
 <div id="alertLevel"></div>
 <div id="lastLevel"></div>
 <div id="cardTask"></div>
 <div class="next">
     <button type="button" id="nextLevel" class="btn navBar nextLevel" onclick="HomePageController.nextLevel()">Prochain niveau</button>
-    <button id="bonus" type="button" class="btn navBar nextLevel disabled"  onclick="navigate('bonus')">Bonus</button>
+    <button id="bonus" type="button" class="btn navBar nextLevel disabled" onclick="HomePageController.buttonPageBonus()">Bonus</button>
 </div>
-
 <div class="nextC">
     <button type="button" class="btn navBar clendr" id="calendarButton" onclick="navigate('calendar')">Calendrier</button>
 </div>

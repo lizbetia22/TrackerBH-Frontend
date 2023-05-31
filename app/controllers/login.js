@@ -5,8 +5,8 @@ import trackerModel from "../model/tracker.js";
     constructor() {
         super();
         this.trackerModel = new trackerModel();
-        this.createdDone()
-
+        this.createdDone();
+        this.serverError();
 
         this.elements = {
             email: document.getElementById('email'),
@@ -57,7 +57,7 @@ import trackerModel from "../model/tracker.js";
 
         if (checkUser) {
             let alert = document.getElementById('alert')
-            alert.innerHTML = `<div class="alert alert-primary" role="alert">
+            alert.innerHTML = `<div class="alert my-alert-sucess" role="alert">
                                     Votre compte a été créé avec succès
                                </div>`
             this.setTimeoutAlert('alert', 1500);
@@ -75,10 +75,11 @@ import trackerModel from "../model/tracker.js";
             let boolean = this.validation()
             if(boolean === true) {
                 let token = await this.trackerModel.getLogin(data)
+                localStorage.setItem('login', "true")
                 sessionStorage.setItem('token', token.token)
                 navigate('homePage');
             } else {
-                document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
+                document.getElementById("loginError").innerHTML = `<div class="alert my-alert-danger" role="alert">
                                                                     Votre e-mail et votre mot de passe ne correspondent pas 
                                                                 </div>`
                 document.getElementById("loginError").style.display = "block";
@@ -96,7 +97,7 @@ import trackerModel from "../model/tracker.js";
                     element.classList.add('is-invalid');
                 });
 
-                document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
+                document.getElementById("loginError").innerHTML = `<div class="alert my-alert-danger" role="alert">
                                                                     Votre e-mail ou votre mot de passe est incorrect.
                                                                 </div>`
                 document.getElementById("loginError").style.display = "block";
@@ -109,7 +110,7 @@ import trackerModel from "../model/tracker.js";
                     element.classList.add('is-invalid');
                 });
 
-                document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
+                document.getElementById("loginError").innerHTML = `<div class="alert my-alert-danger" role="alert">
                                                                    Votre e-mail ou votre mot de passe est incorrect.
                                                                 </div>`
                 document.getElementById("loginError").style.display = "block";
@@ -117,6 +118,18 @@ import trackerModel from "../model/tracker.js";
 
             }
         }
+    }
+
+    serverError(){
+        let alertError = document.getElementById('serverError')
+        if(localStorage.getItem('server error')) {
+            localStorage.removeItem('server error')
+            alertError.innerHTML = `<div class="alert my-alert-danger" role="alert">
+                Erreur Serveur
+            </div>`;
+            this.setTimeoutAlert('serverError', 2500);
+        }
+
     }
 
     validation() {

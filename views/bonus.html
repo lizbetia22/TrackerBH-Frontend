@@ -2,7 +2,7 @@
     <nav class="navbar navBar">
         <span class="titleBar"> <a>
             <img src="res/img/tracker.png" height="55" width="55" class="logo"></a>Tracker BH</span>
-        <button type="button" class="btn info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" id="infoButton" class="infoModal btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-info-circle"
                  viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -17,27 +17,68 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        regle 1
-                        regle 2
-                        regle 3
-                        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                        <ul>
+                            <li>L'application comporte 8 niveaux.</li>
+                            <li>Il y a 7 tâches disponibles pour chaque niveau.</li>
+                            <li>Vous ne pouvez pas consacrer moins d'une minute à la réalisation d'une tâche.</li>
+                            <li>Vous ne pouvez accéder au niveau suivant que si toutes les tâches du niveau ont été accomplies.</li>
+                            <li>Si vous avez débloqué le niveau 8, vous avez accès au niveau "Bonus" et le bouton "Prochain niveau" n'est plus disponible.</li>
+                            <li>Vous pouvez suivre votre progression en utilisant le menu de la page d'accueil.</li>
+                            <li>Pour gérer vos tâches, vous pouvez utiliser le calendrier où vous pouvez ajouter/modifier/supprimer un événement.</li>
+                        </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn navBar info" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 </div>
-<div id="caleandar">
 </div>
-<div class="retourHome">
-    <button type="button" class="btn navBar clendr" id="backhome" onclick="navigate('homePage')">Retour au page
+<h4 class="titleBonus mt-2">Bonus</h4>
+<h5 class="titleFin">Vous pouvez continuer à améliorer vos habitudes grâce à des ressources gratuites</h5>
+    <button type="button" class="btn navBar nextLevel" id="homeBonus" onclick="navigate('homePage')">Retour au page
         d'accueil
     </button>
+<div class="col d-flex justify-content-center mt-5">
+    <div class="card bonusCard">
+        <div class="card-body">
+            <div class="d-flex justify-content-center mt-5">
+            <div class="card" style="width: 16rem; margin: 0 20px;">
+                <img class="card-img-top" src="https://fac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Ffac.2F2020.2F08.2F11.2Fe6ade904-35b2-4366-802d-dbf29965c130.2Ejpeg/1200x1200/quality/80/crop-from/center/focus-point/2340%2C2507/repas-healthy-30-recettes-minceur-pour-se-regaler-sans-culpabiliser.jpeg" alt="Card image cap">
+                <div class="card-body">
+                    <a href="https://www.elle.fr/Elle-a-Table/Idees-de-menus/Recette-healthy" target="_blank" style="color: black;" class="fontBonus">25 repas healthy</a>
+                </div>
+            </div>
+            <div class="card" style="width: 16rem; margin: 0 20px;">
+                <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Color_icon_violet.png" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-text fontBonus">Cours d'anglais</p>
+                </div>
+            </div>
+            <div class="card" style="width: 16rem; margin: 0 20px;">
+                <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Color_icon_violet.png" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-text fontBonus">Leçons vidéo de fitness</p>
+                     </div>
+                </div>
+                <div class="card" style="width: 16rem; margin: 0 20px;">
+                    <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Color_icon_violet.png" alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-text fontBonus">Liste de livres à lire</p>
+                    </div>
+                </div>
+                <div class="card" style="width: 16rem; margin: 0 20px;">
+                    <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Color_icon_violet.png" alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-text fontBonus">Articles sur la philosophie</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>Bonus</h1>
 <div class="addEvent">
 <footer class="fixed-bottom navBar">
     <div class="container p-2 ">

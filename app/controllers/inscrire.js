@@ -42,7 +42,7 @@ class InscrireController extends BaseController {
         } catch (e) {
             let error = document.getElementById('errorEmail')
             if(e === 401) {
-                error.innerHTML = `<div class="alert alert-danger" role="alert">
+                error.innerHTML = `<div class="alert my-alert-danger" role="alert">
   Cet email est déjà utilisé
 </div>`
                 this.setTimeoutAlert('errorEmail', 1500);

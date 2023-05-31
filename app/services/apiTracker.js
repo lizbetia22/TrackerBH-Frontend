@@ -49,9 +49,7 @@ export default class TrackerAPI {
 
     updateUserInfo(data, id_user) {
         const myHeaders= new Headers({"Content-Type": "application/json", "Authorization":`Bearer ${sessionStorage.getItem("token")}`,"Access-Control-Allow-Origin":"*"})
-        console.log(myHeaders)
         const myInit= {method: 'PUT',headers: myHeaders, body : JSON.stringify(data) ,cache: 'default' }
-        console.log(myInit)
         return new Promise((resolve, reject) => fetch(`${this.baseurl}/users/update-user/${id_user}`, myInit)
             .then(res => {
                 if (res.status === 201) {
@@ -82,6 +80,20 @@ export default class TrackerAPI {
         const myHeaders= new Headers({"Authorization":`Bearer ${sessionStorage.getItem("token")}`,"Access-Control-Allow-Origin":"*"})
         const myInit= {headers: myHeaders }
         return new Promise((resolve, reject) => fetch(`${this.baseurl}/user-level/get-level/${id_level}`, myInit)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.json())
+                } else {
+                    reject(res.status)
+                }
+            })
+            .catch(err => reject(err)))
+    }
+
+    getAllLevels() {
+        const myHeaders= new Headers({"Authorization":`Bearer ${sessionStorage.getItem("token")}`,"Access-Control-Allow-Origin":"*"})
+        const myInit= {headers: myHeaders }
+        return new Promise((resolve, reject) => fetch(`${this.baseurl}/levels/all-levels`, myInit)
             .then(res => {
                 if (res.status === 200) {
                     resolve(res.json())
@@ -190,34 +202,6 @@ export default class TrackerAPI {
             .catch(err => reject(err)))
     }
 
-
-    getNumberLevel(id_level) {
-        const myHeaders= new Headers({"Authorization":`Bearer ${sessionStorage.getItem("token")}`,"Access-Control-Allow-Origin":"*"})
-        const myInit= {headers: myHeaders }
-        return new Promise((resolve, reject) => fetch(`${this.baseurl}/levels/${id_level}`, myInit)
-            .then(res => {
-                if (res.status === 200) {
-                    resolve(res.json())
-                } else {
-                    reject(res.status)
-                }
-            })
-            .catch(err => reject(err)))
-    }
-
-    getNumberTask(id_task) {
-        const myHeaders= new Headers({"Authorization":`Bearer ${sessionStorage.getItem("token")}`,"Access-Control-Allow-Origin":"*"})
-        const myInit= {headers: myHeaders }
-        return new Promise((resolve, reject) => fetch(`${this.baseurl}/tasks/${id_task}`, myInit)
-            .then(res => {
-                if (res.status === 200) {
-                    resolve(res.json())
-                } else {
-                    reject(res.status)
-                }
-            })
-            .catch(err => reject(err)))
-    }
 
     updateTaskTime(id_user, id_task) {
         const myHeaders= new Headers({"Content-Type": "application/json", "Authorization":`Bearer ${sessionStorage.getItem("token")}`,"Access-Control-Allow-Origin":"*"})
