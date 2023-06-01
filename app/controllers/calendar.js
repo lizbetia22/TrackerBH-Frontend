@@ -117,20 +117,21 @@ class CalendarController extends BaseController {
 
 
     async createCalendarEvent() {
+        this.isTokenValid()
         let title = document.getElementById(`event-title`).value;
         let date = document.getElementById(`event-date`).value;
         let alert = document.getElementById('addedEvent');
         let catchError = document.getElementById('catchError');
 
-        // try{
-        let boolean = this.validationCalendar();
-        if (boolean === true) {
-            document.getElementById(`event-date`).classList.remove('is-valid');
-            document.getElementById(`event-title`).classList.remove('is-valid');
-            document.getElementById(`event-date`).classList.remove('is-invalid');
-            document.getElementById(`event-title`).classList.remove('is-invalid');
-            let datefinal = new Date(date);
-            let data = { title_event: title, date_event: datefinal };
+        try {
+            let boolean = this.validationCalendar();
+            if (boolean === true) {
+                document.getElementById(`event-date`).classList.remove('is-valid');
+                document.getElementById(`event-title`).classList.remove('is-valid');
+                document.getElementById(`event-date`).classList.remove('is-invalid');
+                document.getElementById(`event-title`).classList.remove('is-invalid');
+                let datefinal = new Date(date);
+                let data = {title_event: title, date_event: datefinal};
 
 
                 await this.trackerModel.createUserCalendarEvent(decodeToken().id_user, data);
@@ -147,21 +148,25 @@ class CalendarController extends BaseController {
         Votre événement a été ajouté avec succès
       </div>`;
                 this.setTimeoutAlert('addedEvent', 1500);
-      //       } catch (error) {
-      //           catchError.innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //           this.setTimeoutAlert('catchError', 1500);
-      //           console.log('Create calendar event error'+ error)
-      //       }
-        }
 
-        document.getElementById(`event-title`).value = '';
-        document.getElementById(`event-date`).value = '';
+                document.getElementById(`event-title`).value = '';
+                document.getElementById(`event-date`).value = '';
+            }
+        }
+        catch
+            (error)
+            {
+                catchError.innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+                this.setTimeoutAlert('catchError', 1500);
+                console.log('Create calendar event error' + error)
+            }
     }
 
 
     async updateEventCalendar(event) {
+        this.isTokenValid()
         try {
 
             let alert = document.getElementById('updateEventAlert');
@@ -206,6 +211,7 @@ class CalendarController extends BaseController {
     }
 
     async getInputValue(event) {
+        this.isTokenValid()
         try {
             const calendarInfo = await this.trackerModel.getOneUserCalendarEvent(decodeToken().id_user, event);
             let title = document.getElementById(`update-title`);
@@ -218,7 +224,7 @@ class CalendarController extends BaseController {
             date.value = formattedDates;
         } catch (error) {
             document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-              Erreur Serveur
+              Une erreur est survenue
       </div>`;
             this.setTimeoutAlert('catchError', 1500);
             console.error('Input calendar error' + error);
@@ -227,7 +233,7 @@ class CalendarController extends BaseController {
 
 
     async deleteCalendarEvent(event) {
-        // try {
+            this.isTokenValid()
             const calendarInfo = await this.trackerModel.deleteEvent(event);
             const alert = document.getElementById('deleteEvent');
 
@@ -246,14 +252,8 @@ class CalendarController extends BaseController {
       </div>`;
                 this.setTimeoutAlert('deleteEvent', 1500);
             }
-      //   } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.error('An error occurred while deleting the calendar event', error);
-      //   }
-    }
+        }
+
 
 
 

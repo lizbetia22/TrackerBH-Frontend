@@ -17,10 +17,14 @@ export default class trackerModel {
             let newProfile = await this.api.createUser(dataUser)
             return newProfile
         } catch(e) {
-            navigate('login');
-            sessionStorage.removeItem('token');
-            localStorage.setItem('server error', "true")
-            throw new Error()
+            if(e === 401){
+                throw new Error(`401`);
+            } else if (e === 500) {
+                navigate('login');
+                sessionStorage.removeItem('token');
+                localStorage.setItem('server error', "true")
+                throw new Error();
+            }
         }
     }
 
@@ -29,10 +33,14 @@ export default class trackerModel {
         let updatedUser = await this.api.updateUserInfo(data, id_user)
         return updatedUser;
         } catch(e) {
-           navigate('login');
-           sessionStorage.removeItem('token');
-           localStorage.setItem('server error', "true")
-           throw new Error()
+            if(e === 401){
+                throw new Error(`401`);
+            } else if (e === 500) {
+                navigate('login');
+                sessionStorage.removeItem('token');
+                localStorage.setItem('server error', "true")
+                throw new Error();
+            }
         }
     }
 
@@ -195,7 +203,7 @@ export default class trackerModel {
             let updatedEvent = await this.api.updateCalendarEvent(id_event_calendar, dataEvent)
             return updatedEvent
         } catch(e) {
-            let modal = document.getElementById('exampleModal1');
+            let modal = document.getElementById('exampleModal2');
             modal.classList.remove('show');
             modal.style.display = 'none';
             document.body.classList.remove('modal-open');
@@ -235,6 +243,12 @@ export default class trackerModel {
             let userEvent = await this.api.getOneUsersCalendarEvent(id_user, id_event_calendar)
             return userEvent
         } catch(e) {
+            let modal = document.getElementById('exampleModal2');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            let modalBackdrop = document.querySelector('.modal-backdrop');
+            modalBackdrop.parentNode.removeChild(modalBackdrop);
             navigate('login');
             sessionStorage.removeItem('token');
             localStorage.setItem('server error', "true")
@@ -249,4 +263,5 @@ export default class trackerModel {
             throw new Error()
         }
     }
+
 }

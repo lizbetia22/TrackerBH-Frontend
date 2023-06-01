@@ -7,6 +7,7 @@ import trackerModel from "../model/tracker.js";
         this.trackerModel = new trackerModel();
         this.createdDone();
         this.serverError();
+        this.expiredToken();
 
         this.elements = {
             email: document.getElementById('email'),
@@ -131,6 +132,18 @@ import trackerModel from "../model/tracker.js";
         }
 
     }
+
+    expiredToken(){
+        let alertToken = document.getElementById('tokenAlert')
+        if(localStorage.getItem('expiredToken')) {
+            localStorage.removeItem('expiredToken')
+            alertToken.innerHTML = `<div class="alert my-alert-sucess" role="alert">
+                                                                    Votre session est expiré
+                                                                </div>`
+            this.setTimeoutAlert('tokenAlert', 2000);
+        }
+    }
+
 
     validation() {
         const {

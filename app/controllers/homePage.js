@@ -28,20 +28,22 @@ class HomePageController extends BaseController {
 
 
     async setNickname() {
-        // try {
+        this.isTokenValid()
+        try {
             let user_info = await this.trackerModel.getUserInfo(decodeToken().id_user);
             document.getElementById('nickname').innerHTML = `${user_info.nickname}, ${user_info.age}`;
-      //   } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.error('Get user info error ', error);
-      //   }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+             Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Get user info error ', error);
+        }
     }
 
 
     async userLevelName() {
+        this.isTokenValid()
         try {
             let getUserLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
             let getLevel = await this.trackerModel.getNameLevel(getUserLevel);
@@ -49,27 +51,30 @@ class HomePageController extends BaseController {
             document.getElementById(`numberOflevel`).innerHTML = `<h4 style="text-align: center">Niveau - ${getLevel.id_level}</h4>`;
             let progressPercentage = await this.calculateProgressPercentage();
             await this.updateProgress(progressPercentage);
-            // await this.updateRound(progressPercentage);
         } catch (error) {
-            console.log(`cest moi adrien 2`)
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+             Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Get user level name error ', error);
 
         }
     }
 
     async calculateProgressPercentage() {
-        // try {
+        this.isTokenValid()
+        try {
             const level = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
             const totalLevels = 8;
             const progressPercentage = Math.round((level / totalLevels) * 100);
             return progressPercentage;
-      //   } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.log('Calculating progress ' + error);
-      //       return 0;
-      //   }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.log('Calculating progress error ' + error);
+        }
     }
 
     async updateProgress() {
@@ -95,13 +100,8 @@ class HomePageController extends BaseController {
         progressBar.classList.add('progress-animation');
     }
 
-    updateRound(percentage){
-        const progressElement = document.querySelector('.progress-element');
-        const remainingPercentage = 100 - percentage;
-        progressElement.style.setProperty('--progress-value', remainingPercentage);
-    }
-
     async userTaskName() {
+        this.isTokenValid()
         let card = document.getElementById('cardTask')
         let content = ''
         try {
@@ -129,19 +129,18 @@ class HomePageController extends BaseController {
                                 </div>`
             }
         } catch (error) {
-            console.log(`cest moi adrien 3`)
-
-            //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.log('Get user name task error' + error)
+                  document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.log('Get user name task error' + error)
         }
         card.innerHTML = content
         await this.checkedCheckBoxTrue();
     }
 
     async checkedCheckbox(index) {
+        this.isTokenValid()
        try {
             await this.trackerModel.getUserInfo(decodeToken().id_user)
             const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
@@ -174,16 +173,17 @@ class HomePageController extends BaseController {
                 }
             }
         } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.error('Error occurred while checking the checkbox ', error);
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while checking the checkbox ', error);
         }
     }
 
 
     async checkedCheckBoxTrue() {
+        this.isTokenValid()
         try {
             const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
             for (let i = 1; i < 8; i++) {
@@ -195,16 +195,16 @@ class HomePageController extends BaseController {
                 }
             }
         } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.error('Error occurred while setting checked checkboxes ', error);
-            console.log(`cest moi adrien 4`)
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while setting checked checkboxes ', error);
         }
     }
 
     async nextLevel() {
+        this.isTokenValid()
         try {
             await this.trackerModel.getUserInfo(decodeToken().id_user)
             const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
@@ -235,10 +235,12 @@ class HomePageController extends BaseController {
                 this.lastLevelAlert();
                 this.isLevelCompleted();
 
-                document.getElementById("alertLevel").innerHTML = `<div class="alert my-alert-sucess" role="alert">
+                if(userLevel !==8 ){
+                    document.getElementById("alertLevel").innerHTML = `<div class="alert my-alert-sucess" role="alert">
         Vous avez passé au niveau suivant
       </div>`;
-                this.setTimeoutAlert('alertLevel', 2000);
+                    this.setTimeoutAlert('alertLevel', 2000);
+                }
 
             } else {
                 document.getElementById("alertLevel").innerHTML = `<div class="alert my-alert-danger" role="alert">
@@ -251,12 +253,11 @@ class HomePageController extends BaseController {
                 }, 1000);
             }
         } catch (error) {
-            console.log(`cest moi adrien`)
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Level Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.log('An error occurred during setting next level:', error);
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+             Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.log('An error occurred during setting next level:', error);
         }
     }
 
@@ -272,47 +273,47 @@ class HomePageController extends BaseController {
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 document.getElementById("lastLevel").innerHTML = "";
             } else {
-                //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-                //         Erreur Serveur
-                // </div>`;
-                //       this.setTimeoutAlert('catchError', 1500);
                 document.getElementById("lastLevel").innerHTML = "";
             }
         }catch (e) {
-            console.log(`cest moi adrien 5`)
+                  document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+                     Une erreur est survenue
+            </div>`;
+                  this.setTimeoutAlert('catchError', 1500);
+            console.log(`Error of setting last level alert`)
         }
     }
 
     async buttonBonusEnable() {
-        // try {
+        try {
             let bonus = document.getElementById("bonus");
             let currentLevel = await this.trackerModel.getUserLevelInfo(decodeToken().id_user);
             if (currentLevel && currentLevel.id_level === 8) {
                 bonus.classList.remove("disabled");
                 document.getElementById("nextLevel").setAttribute("disabled", "disabled");
             }
-      //   } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.error('Error occurred while enabling the bonus button', error);
-      //   }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+               Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while enabling the bonus button', error);
+        }
     }
 
     async buttonPageBonus() {
-        // try {
+        try {
             let currentLevel = await this.trackerModel.getUserLevelInfo(decodeToken().id_user);
             if (currentLevel && currentLevel.id_level === 8) {
                 navigate('bonus');
             }
-      //   } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.error('Error occurred while navigating to the bonus page:', error);
-      //   }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while navigating to the bonus page:', error);
+        }
     }
 
 
@@ -341,18 +342,17 @@ class HomePageController extends BaseController {
                 }
             });
         } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.error('Error occurred while checking if the 8 level is completed', error);
-            console.log(`cest moi adrien 6`)
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while checking if the 8 level is completed', error);
         }
     }
 
 
     async barMenu() {
-        // try {
+        try {
             let allLevels = await this.trackerModel.getAllLevels();
             const menuBox = document.querySelector('.menu__box');
             allLevels.forEach((level) => {
@@ -368,20 +368,20 @@ class HomePageController extends BaseController {
             const logoLink = document.createElement('a');
             const logoImg = document.createElement('img');
             logoLink.classList.add('img__item');
-            logoImg.src = 'res/img/tracker.png';
+            logoImg.src = 'https://www.hebergeur-image.com/upload/86.221.48.88-6478824be637e.png';
             logoImg.height = '60';
             logoImg.width = '60';
             logoImg.classList.add('logo');
             logoLink.appendChild(logoImg);
             logoItem.appendChild(logoLink);
             menuBox.appendChild(logoItem);
-        // } catch (error) {
-      //       document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
-      //         Erreur Serveur
-      // </div>`;
-      //       this.setTimeoutAlert('catchError', 1500);
-      //       console.error('An error occurred while setting the menu bar', error);
-      //   }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+               Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('An error occurred while setting the menu bar', error);
+        }
     }
 
 

@@ -20,12 +20,8 @@ export default class BaseController {
             let jwtdecode = decodeToken(jwt)
             if (jwtdecode.exp <= Math.floor(Date.now() / 1000)) {
                 sessionStorage.removeItem("token")
+                localStorage.setItem("expiredToken", "true")
                 navigate("login")
-                document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
-                                                                    Votre session est expiré
-                                                                </div>`
-                document.getElementById("loginError").style.display = "block";
-                this.setTimeoutAlert('loginError', 1500);
             } else {
                 let new_token = await this.trackerModel.refreshToken(decodeToken().id_user)
                 sessionStorage.removeItem("token")

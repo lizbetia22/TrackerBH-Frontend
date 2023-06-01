@@ -2,24 +2,24 @@ import BaseController from "./basecontroller.js";
 import trackerModel from "../model/tracker.js";
 
  class UpdateUserController extends BaseController {
-    constructor() {
-        super();
-        this.elements = {
-            name: document.getElementById('name'),
-            lastName: document.getElementById('lastname'),
-            nickname: document.getElementById('nickname'),
-            age: document.getElementById('age'),
-            email: document.getElementById('email'),
-            password: document.getElementById('password'),
-        };
-        this.trackerModel = new trackerModel();
-        this.setInputValue();
-    }
+     constructor() {
+         super();
+         this.elements = {
+             name: document.getElementById('name'),
+             lastName: document.getElementById('lastname'),
+             nickname: document.getElementById('nickname'),
+             age: document.getElementById('age'),
+             email: document.getElementById('email'),
+             password: document.getElementById('password'),
+         };
+         this.trackerModel = new trackerModel();
+         this.setInputValue();
+     }
 
      async setInputValue() {
          const userGetInfo = await this.trackerModel.getUserInfo(decodeToken().id_user);
 
-         const { elements } = this;
+         const {elements} = this;
          elements.name.value = userGetInfo.firstName;
          elements.lastName.value = userGetInfo.lastName;
          elements.nickname.value = userGetInfo.nickname;
@@ -28,6 +28,7 @@ import trackerModel from "../model/tracker.js";
      }
 
      async updateProfile() {
+         this.isTokenValid()
          try {
              const {
                  name,
@@ -43,39 +44,36 @@ import trackerModel from "../model/tracker.js";
                  "email": email.value, "password": password.value
              }
              let boolean = this.validation()
-             if (boolean === false) {
-                 await this.validation();
-                 document.getElementById("alertError").innerHTML = `<div class="alert my-alert-danger" role="alert">
-                                                                       Les données saisies sont incorrectes
+             if (boolean === true) {
+
+                 await this.trackerModel.updateUser(data, decodeToken().id_user)
+                 document.getElementById("alertError").innerHTML = `<div class="alert my-alert-sucess" role="alert">
+                                                                         Votre compte a été modifié avec succès
                                                                     </div>`
                  this.setTimeoutAlert('alertError', 2000);
-             } else {
-                 await this.validation();
-                 document.getElementById("alertOkay").innerHTML = `<div class="alert my-alert-sucess" role="alert">
-                                                                        Votre compte a été modifié avec succès
-                                                                    </div>`
-                 this.setTimeoutAlert('alertOkay', 2000);
-                 await this.trackerModel.updateUser(data, decodeToken().id_user)
              }
-
              window.displayDone = true;
 
-     } catch (e) {
+         } catch (e) {
              await this.validation();
              let error = document.getElementById('alertEmail')
-             if (e === 401) {
+
+             if (e.message === `401`) {
                  error.innerHTML = `<div class="alert my-alert-danger" role="alert">
-               Il existe déjà un compte avec cet email
+  Cet email est déjà utilisé
 </div>`
                  this.setTimeoutAlert('alertEmail', 2000);
+
                  Object.values(this.elements).forEach(element => {
-                     element.classList.remove('is-valid');
-                     element.classList.add('is-invalid');
+                     if (element === email) {
+                         element.classList.add('is-invalid');
+                         document.getElementById('validEmail').innerHTML = `<h5 style="color: red; font-size: 12px">Cet email est déjà utilisé<h5/>`
+                     }
                  });
              }
-         }
-         }
 
-}
+         }
+     }
+ }
 
 export default () => window.UpdateUserController = new UpdateUserController()

@@ -35,21 +35,22 @@ class InscrireController extends BaseController {
 
                 await this.trackerModel.createProfile(data)
                 localStorage.setItem("isRegistered", true);
-                //window.displayDone = true
 
                 navigate('login')
             }
         } catch (e) {
             let error = document.getElementById('errorEmail')
-            if(e === 401) {
+            if(e.message === `401`) {
                 error.innerHTML = `<div class="alert my-alert-danger" role="alert">
   Cet email est déjà utilisé
 </div>`
-                this.setTimeoutAlert('errorEmail', 1500);
+                this.setTimeoutAlert('errorEmail', 2000);
 
                 Object.values(this.elements).forEach(element => {
-                    element.classList.remove('is-valid');
-                    element.classList.add('is-invalid');
+                    if (element === email) {
+                        element.classList.add('is-invalid');
+                        document.getElementById('validEmail').innerHTML = `<h5 style="color: red; font-size: 12px">Cet email est déjà utilisé<h5/>`
+                    }
                 });
             }
         }
