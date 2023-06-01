@@ -30,6 +30,20 @@ export default class BaseController {
             }
         }
     }
+
+    togglePasswordVisibility(inputId, iconId) {
+        let passwordInput = document.getElementById(inputId);
+        let toggleIcon = document.getElementById(iconId);
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.className = 'fa-solid fa-eye';
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.className = 'fa-regular fa-eye-slash';
+        }
+    }
+
     setTimeoutAlert(id, delay) {
         const element = document.getElementById(id);
         if (element) {

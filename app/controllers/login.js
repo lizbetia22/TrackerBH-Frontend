@@ -91,7 +91,7 @@ import trackerModel from "../model/tracker.js";
                 });
             }
         } catch (error){
-            if (error.response && error.response.status === 401) {
+            if (error.message === `401`) {
 
                 Object.values(this.elements).forEach(element => {
                     element.classList.remove('is-valid');

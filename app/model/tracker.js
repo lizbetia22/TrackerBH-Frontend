@@ -8,7 +8,14 @@ export default class trackerModel {
             let login = await this.api.loginTracker(mail_password)
             return login
         } catch(e) {
-            throw new Error()
+            if(e === 401){
+                throw new Error(`401`);
+            } else  {
+                navigate('login');
+                sessionStorage.removeItem('token');
+                localStorage.setItem('server error', "true")
+                throw new Error();
+            }
         }
     }
 
@@ -19,7 +26,7 @@ export default class trackerModel {
         } catch(e) {
             if(e === 401){
                 throw new Error(`401`);
-            } else if (e === 500) {
+            } else  {
                 navigate('login');
                 sessionStorage.removeItem('token');
                 localStorage.setItem('server error', "true")
@@ -35,7 +42,7 @@ export default class trackerModel {
         } catch(e) {
             if(e === 401){
                 throw new Error(`401`);
-            } else if (e === 500) {
+            } else  {
                 navigate('login');
                 sessionStorage.removeItem('token');
                 localStorage.setItem('server error', "true")

@@ -75,18 +75,34 @@
                         <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="Votre email">
                         <div id="validEmail"></div>
                     </div>
+
+
                     <div class="form-group inputCompte">
-                        <i class="fa-solid fa-key" style="color: rgba(47,47,49,0.93);"></i>
+                        <i class="fa-solid fa-key" style="color: rgba(47, 47, 49, 0.93);"></i>
                         <label for="password">Mot de passe</label>
-                        <input type="password" class="form-control" id="password" placeholder="Mot de passe">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" placeholder="Mot de passe">
+                            <button class="btn btn-outline-secondary" type="button" onclick="UpdateUserController.togglePasswordVisibility('password', 'toggleIcon')">
+                                <i id="toggleIcon" class="fa-regular fa-eye-slash" style="color: #2c2d30;"></i>
+                            </button>
+                        </div>
                         <div id="validPassword"></div>
                     </div>
+
+
                     <div class="form-group inputCompte">
-                        <i class="fa-solid fa-key" style="color: rgba(47,47,49,0.93);"></i>
-                        <label for="password1">Confirmation de mot de passe</label>
-                        <input type="password" class="form-control" id="password1" placeholder="Mot de passe">
+                        <i class="fa-solid fa-key" style="color: rgba(47, 47, 49, 0.93);"></i>
+                        <label for="password">Confirmation de mot de passe</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password1" placeholder="Confirmation de mot de passe">
+                            <button class="btn btn-outline-secondary" type="button" onclick="UpdateUserController.togglePasswordVisibility('password1', 'toggleIconConf')">
+                                <i id="toggleIconConf" class="fa-regular fa-eye-slash" style="color: #2c2d30;"></i>
+                            </button>
+                        </div>
                         <div id="validPasswordConfirm"></div>
                     </div>
+
+
                     <div class="col d-flex justify-content-center">
                         <button onclick="UpdateUserController.updateProfile()" type="submit" class="btn navBar create">Modifier votre compte</button>
                         <button onclick="navigate('homePage')" type="submit" style="margin-left: 10px" class="btn navBar create" >Retour au page

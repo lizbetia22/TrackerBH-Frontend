@@ -444,6 +444,9 @@ input[type=checkbox] {
     font-family: "Century Gothic";
 }
 
+.btn-outline-secondary {
+    border: 1px solid #a6a9b6;
+}
 
 
 

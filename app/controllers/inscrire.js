@@ -32,7 +32,6 @@ class InscrireController extends BaseController {
             }
             let boolean =  this.validation()
             if(boolean === true){
-
                 await this.trackerModel.createProfile(data)
                 localStorage.setItem("isRegistered", true);
 
