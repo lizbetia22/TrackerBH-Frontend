@@ -143,7 +143,7 @@ class HomePageController extends BaseController {
 
     async checkedCheckbox(index) {
        try {
-            const user_info = await this.trackerModel.getUserInfo(decodeToken().id_user)
+            await this.trackerModel.getUserInfo(decodeToken().id_user)
             const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
             const id_task = index + 7 * (userLevel - 1);
 
@@ -206,7 +206,7 @@ class HomePageController extends BaseController {
 
     async nextLevel() {
         try {
-            const user_info = await this.trackerModel.getUserInfo(decodeToken().id_user)
+            await this.trackerModel.getUserInfo(decodeToken().id_user)
             const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
             if (userLevel === 8) {
                 return;
@@ -234,6 +234,12 @@ class HomePageController extends BaseController {
                 this.userTaskName();
                 this.lastLevelAlert();
                 this.isLevelCompleted();
+
+                document.getElementById("alertLevel").innerHTML = `<div class="alert my-alert-sucess" role="alert">
+        Vous avez passé au niveau suivant
+      </div>`;
+                this.setTimeoutAlert('alertLevel', 2000);
+
             } else {
                 document.getElementById("alertLevel").innerHTML = `<div class="alert my-alert-danger" role="alert">
                 Vous n'avez pas fait toutes les tâches
