@@ -2,7 +2,8 @@
 
 export default class TrackerAPI {
     constructor() {
-        this.baseurl = 'http://localhost:3000'
+        this.baseurl = 'https://www.main-bvxea6i-fik2r5yrqqnwc.fr-4.platformsh.site'
+        // this.baseurl = 'http://localhost:3000'
     }
 
     loginTracker(mail_password) {
