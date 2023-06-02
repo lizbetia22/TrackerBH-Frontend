@@ -1,41 +1,97 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css">
-
-    <title>Document</title>
-</head>
-<body>
-<!-- HTML code -->
-<button id="toggle-theme">
-    <svg style="padding-right: 7px" xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-brightness-high info" viewBox="0 0 16 16">
-        <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-    </svg>
-    <span>Toggle theme</span>
-</button>
-
-<!-- JavaScript code -->
-<script>
-    const toggleButton = document.getElementById('toggle-theme');
-    const body = document.body;
-    const storedTheme = localStorage.getItem('theme');
-    const isDarkMode = storedTheme === 'dark';
-
-    if (isDarkMode) {
-        body.classList.add('dark');
-    }
-
-    toggleButton.addEventListener('click', () => {
-        body.classList.toggle('dark');
-        const theme = body.classList.contains('dark') ? 'dark' : 'light';
-        localStorage.setItem('theme', theme);
-    });
-</script>
-
-</body>
-</html>
+<div>
+    <nav class="navbar navBar">
+        <span class="titleBar"> <a>
+            <img src="https://www.hebergeur-image.com/upload/86.221.48.88-6478824be637e.png" height="55" width="55" class="logo"></a>Tracker BH</span>
+        <button type="button" id="infoButton" class="infoModal btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-info-circle"
+                 viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+        </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font" id="exampleModalLabel">Instruction de Tracker</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li>L'application comporte 8 niveaux.</li>
+                            <li>Il y a 7 tâches disponibles pour chaque niveau.</li>
+                            <li>Vous ne pouvez pas consacrer moins d'une minute à la réalisation d'une tâche.</li>
+                            <li>Vous ne pouvez accéder au niveau suivant que si toutes les tâches du niveau ont été accomplies.</li>
+                            <li>Si vous avez débloqué le niveau 8, vous avez accès au niveau "Bonus" et le bouton "Prochain niveau" n'est plus disponible.</li>
+                            <li>Vous pouvez suivre votre progression en utilisant le menu de la page d'accueil.</li>
+                            <li>Pour gérer vos tâches, vous pouvez utiliser le calendrier où vous pouvez ajouter/modifier/supprimer un événement.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+</div>
+<h4 class="titleBonus mt-2">Bonus</h4>
+<h5 class="titleFin">Vous pouvez continuer à améliorer vos habitudes grâce à des ressources gratuites</h5>
+    <button type="button" class="btn navBar nextLevel" id="homeBonus" onclick="BonusController.navigateHome()">Retour au page
+        d'accueil
+    </button>
+<div class="col d-flex justify-content-center mt-5">
+    <div class="card bonusCard">
+        <div class="card-body">
+            <div class="d-flex justify-content-center mt-5">
+            <div class="card" style="width: 16rem; margin: 0 20px;">
+                <img class="card-img-top" src="https://fac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Ffac.2F2020.2F08.2F11.2Fe6ade904-35b2-4366-802d-dbf29965c130.2Ejpeg/1200x1200/quality/80/crop-from/center/focus-point/2340%2C2507/repas-healthy-30-recettes-minceur-pour-se-regaler-sans-culpabiliser.jpeg" alt="Card image cap">
+                <div class="card-body">
+                    <a href="https://www.elle.fr/Elle-a-Table/Idees-de-menus/Recette-healthy" target="_blank" style="color: black;" class="fontBonus">25 repas healthy</a>
+                </div>
+            </div>
+            <div class="card" style="width: 16rem; margin: 0 20px;">
+                <img class="card-img-top" src="https://play-lh.googleusercontent.com/Zyfct5lzUN-sqBaL0CRfkF_U8lHiE72svmlBPjDmCUW76isRsnArezIFAIW2UEwqG5U" alt="Card image cap">
+                <div class="card-body">
+                    <a href="https://fr.duolingo.com/" target="_blank" style="color: black;" class="fontBonus">Cours d'anglais</a>
+                </div>
+            </div>
+            <div class="card" style="width: 16rem; margin: 0 20px;">
+                <img class="card-img-top" src="https://img.freepik.com/vecteurs-libre/concept-equipement-sport_1284-13034.jpg?w=2000" alt="Card image cap">
+                <div class="card-body">
+                    <a href="https://www.youtube.com/watch?v=UItWltVZZmE" target="_blank" style="color: black;" class="fontBonus">Cours vidéo de fitness</a>
+                     </div>
+                </div>
+                <div class="card" style="width: 16rem; margin: 0 20px;">
+                    <img class="card-img-top" src="https://images.ctfassets.net/fxjn30k1sseo/6FBIkb0qxhS0b3DGJMb8KV/7286106dd3618af31b5f1cafd6acd65e/Romance_web_tile.png" alt="Card image cap">
+                    <div class="card-body">
+                        <a href="https://www.en-vols.com/inspirations/culture/livres-a-lire-une-fois-dans-sa-vie/" target="_blank" style="color: black;" class="fontBonus">Liste de livres à lire</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 16rem; margin: 0 20px;">
+                    <img class="card-img-top" src="https://www.lycee-chateaubriand.eu/sites/default/files/actus/philosophie-ever.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <a href="https://www.philomag.com/" target="_blank" style="color: black;" class="fontBonus">Articles philosophique</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="addEvent">
+<footer class="fixed-bottom navBar">
+    <div class="container p-2 ">
+        <div class="row">
+            <div class="mb-4 mb-md-0">
+                <h5 class="titleBar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                         class="bi bi-github" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    <a style="color: honeydew" href="https://github.com/ProjetEsimedJs/Tracker" target="_blank">GitHub</a></h5>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>

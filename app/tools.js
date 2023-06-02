@@ -62,3 +62,5 @@ function decodeToken() {
 
     return JSON.parse(jsonPayload);
 }
+
+

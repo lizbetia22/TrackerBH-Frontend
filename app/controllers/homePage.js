@@ -5,41 +5,111 @@ class HomePageController extends BaseController {
     constructor() {
         super()
         this.trackerModel = new trackerModel()
+        this.isLevelCompleted();
         this.userLevelName();
         this.setNickname();
-        this.userLevelTask();
+        this.userTaskName();
+        this.buttonBonusEnable();
+        this.barMenu();
+        this.alertLogin();
     }
+
+    alertLogin(){
+        alert = document.getElementById('loginAlert')
+        if (localStorage.getItem('login')) {
+            localStorage.removeItem('login')
+            alert.innerHTML = `<div class="alert my-alert-sucess" role="alert">
+                Vous avez connecte avec succès
+            </div>`;
+            this.setTimeoutAlert('loginAlert', 2000);
+        }
+
+    }
+
 
     async setNickname() {
-        let user_info = (await this.trackerModel.getUserInfo(decodeToken().id_user))
-        document.getElementById('nickname').innerHTML = `${user_info.nickname}, ${user_info.age}`
-    }
-
-    logOut() {
-        sessionStorage.clear()
-        navigate('login')
-    }
-
-    async userLevelName() {
+        this.isTokenValid()
         try {
-            let getUserLevel = (await this.trackerModel.getLevelUserId(decodeToken().id_user)).id_level
-            let getLevel = await this.trackerModel.getNameLevel(getUserLevel)
-            document.getElementById(`titleWeek`).innerHTML = `${getLevel.name_level}`
-            document.getElementById(`numberOflevel`).innerHTML = `<h5 style="text-align: center">niveau-${getLevel.id_level}</h5>`
-
-    } catch (e) {
-            console.log(e)
+            let user_info = await this.trackerModel.getUserInfo(decodeToken().id_user);
+            document.getElementById('nickname').innerHTML = `${user_info.nickname}, ${user_info.age}`;
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+             Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Get user info error ', error);
         }
     }
 
-    async userLevelTask() {
+
+    async userLevelName() {
+        this.isTokenValid()
+        try {
+            let getUserLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+            let getLevel = await this.trackerModel.getNameLevel(getUserLevel);
+            document.getElementById(`titleWeek`).innerHTML = `${getLevel.name_level}`;
+            document.getElementById(`numberOflevel`).innerHTML = `<h4 style="text-align: center">Niveau - ${getLevel.id_level}</h4>`;
+            let progressPercentage = await this.calculateProgressPercentage();
+            await this.updateProgress(progressPercentage);
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+             Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Get user level name error ', error);
+
+        }
+    }
+
+    async calculateProgressPercentage() {
+        this.isTokenValid()
+        try {
+            const level = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+            const totalLevels = 8;
+            const progressPercentage = Math.round((level / totalLevels) * 100);
+            return progressPercentage;
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.log('Calculating progress error ' + error);
+        }
+    }
+
+    async updateProgress() {
+        const progressValue = await this.calculateProgressPercentage();
+        const progressBar = document.querySelector('.progress-bar');
+        progressBar.setAttribute('data-progress', progressValue);
+        progressBar.style.cssText = `--progress-value: ${progressValue}`;
+        var newStyle = `
+    @keyframes progress {
+        to {
+            --progress-value: ${progressValue};
+        }
+    }
+`;
+        var head = document.head || document.getElementsByTagName('head')[0];
+        var style = document.createElement('style');
+        style.id = 'progress-style';
+        style.appendChild(document.createTextNode(newStyle));
+        head.appendChild(style);
+
+        void progressBar.offsetWidth;
+
+        progressBar.classList.add('progress-animation');
+    }
+
+    async userTaskName() {
+        this.isTokenValid()
         let card = document.getElementById('cardTask')
         let content = ''
         try {
-            let getUserTask = (await this.trackerModel.getTaskUserId(decodeToken().id_user)).id_task
-            let getTask = await this.trackerModel.getNameTask(getUserTask)
-            console.log(getTask)
-            getTask.forEach(Task => {
+            let getTask = await this.trackerModel.getAllTasksOfLevel(decodeToken().id_user)
+            for (const Task of getTask) {
+                const index = getTask.indexOf(Task);
+                let getNameofTask = (await this.trackerModel.getNameTasks(Task.id_task)).name_task
+
                 content += `
                                 <div style="display: flex">
                                 <div class="col d-flex justify-content-center mt-4 align-items-center">
@@ -47,100 +117,369 @@ class HomePageController extends BaseController {
                                         <div class="card-body">
                                             <div class="row fontInput">
                                                 <div class="textcard">
-                                                    <h5 class="titleTask">${Task.name_task}</h5>
+                                                    <h5 class="titleTask">${getNameofTask}</h5>
                                                 </div>
                                                 <div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="checkbox" id="check" class="check">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clock timeBtn" viewBox="0 0 16 16">
-                                  <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
-                                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
-                                </svg>
+                                    <input id="checkbox-${index + 1}" onchange="HomePageController.checkedCheckbox(${index + 1})" type="checkbox" class="check">
                                 </div>
                                 </div>`
-            })
-        } catch (e) {
-            console.log(e)
+            }
+        } catch (error) {
+                  document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.log('Get user name task error' + error)
         }
         card.innerHTML = content
+        await this.checkedCheckBoxTrue();
     }
 
-    nextLevel(){
-        let numberOfCheckboxChecked = 0;
-        document.querySelectorAll('.check').forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                if (checkbox.checked) {
-                    numberOfCheckboxChecked++;
+    async checkedCheckbox(index) {
+        this.isTokenValid()
+       try {
+            await this.trackerModel.getUserInfo(decodeToken().id_user)
+            const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+            const id_task = index + 7 * (userLevel - 1);
+
+            if (id_task === 1 || id_task % 7 === 1) {
+                await this.trackerModel.updateTaskTime(decodeToken().id_user, id_task);
+                await this.trackerModel.updateCheckBox(decodeToken().id_user, id_task);
+            } else {
+                const dateTaskEnd = (await this.trackerModel.getIdTaskByUser(decodeToken().id_user, id_task - 1)).task_date_end;
+                let date = new Date();
+                date.setHours(date.getHours() + 1);
+                date.setMinutes(date.getMinutes() - 1);
+                let isoString = date.toISOString();
+
+                if (isoString > dateTaskEnd) {
+                    await this.trackerModel.updateTaskTime(decodeToken().id_user, id_task);
+                    await this.trackerModel.updateCheckBox(decodeToken().id_user, id_task);
                 } else {
-                    numberOfCheckboxChecked--;
+                    document.getElementById("alertLevel").innerHTML = `<div class="alert my-alert-danger" role="alert">
+                                                  Vous avez passé moins  d'1 minute sur la tâche
+                                                </div>`;
+                    document.getElementById("alertLevel").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("alertLevel").style.display = "none";
+                    }, 1500);
+
+                    let checkbox = document.getElementById(`checkbox-${index}`);
+                    checkbox.checked = false;
+                }
+            }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while checking the checkbox ', error);
+        }
+    }
+
+
+    async checkedCheckBoxTrue() {
+        this.isTokenValid()
+        try {
+            const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+            for (let i = 1; i < 8; i++) {
+                const id_task = i + 7 * (userLevel - 1);
+                const getIdTask = (await this.trackerModel.getIdTaskByUser(decodeToken().id_user, id_task)).checkBox;
+                if (getIdTask) {
+                    let idCheckbox = `checkbox-${i}`;
+                    document.getElementById(idCheckbox).checked = true;
+                }
+            }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while setting checked checkboxes ', error);
+        }
+    }
+
+    async nextLevel() {
+        this.isTokenValid()
+        try {
+            await this.trackerModel.getUserInfo(decodeToken().id_user)
+            const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+            if (userLevel === 8) {
+                return;
+            }
+
+            let allChecked = true;
+            for (let i = 1; i < 8; i++) {
+                const id_task = i + 7 * (userLevel - 1);
+                const getIdTask = (await this.trackerModel.getIdTaskByUser(decodeToken().id_user, id_task)).checkBox;
+
+                if (!getIdTask) {
+                    allChecked = false;
+                }
+            }
+
+            if (allChecked) {
+                await this.trackerModel.setNextLevel(decodeToken().id_user);
+                this.userLevelName();
+
+                for (let i = 1; i < 8; i++) {
+                    const id_task = i + 7 * (userLevel - 1);
+                    await this.trackerModel.setNextTasks(decodeToken().id_user, id_task);
+                }
+
+                this.userTaskName();
+                this.lastLevelAlert();
+                this.isLevelCompleted();
+
+                if(userLevel !==8 ){
+                    document.getElementById("alertLevel").innerHTML = `<div class="alert my-alert-sucess" role="alert">
+        Vous avez passé au niveau suivant
+      </div>`;
+                    this.setTimeoutAlert('alertLevel', 2000);
+                }
+
+            } else {
+                document.getElementById("alertLevel").innerHTML = `<div class="alert my-alert-danger" role="alert">
+                Vous n'avez pas fait toutes les tâches
+            </div>`;
+                document.getElementById("alertLevel").style.display = "block";
+
+                setTimeout(() => {
+                    document.getElementById("alertLevel").style.display = "none";
+                }, 1000);
+            }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+             Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.log('An error occurred during setting next level:', error);
+        }
+    }
+
+
+    async lastLevelAlert() {
+        try {
+            let currentLevel = await this.trackerModel.getUserLevelInfo(decodeToken().id_user)
+            if (currentLevel && currentLevel.id_level === 8) {
+                document.getElementById("lastLevel").innerHTML = `<div class="alert my-alert-sucess" role="alert">
+                                                      Felicitations! Vous avez debloqué niveau bonus!
+                                                  </div>`;
+                document.getElementById("bonus").classList.remove("disabled");
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                document.getElementById("lastLevel").innerHTML = "";
+            } else {
+                document.getElementById("lastLevel").innerHTML = "";
+            }
+        }catch (e) {
+                  document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+                     Une erreur est survenue
+            </div>`;
+                  this.setTimeoutAlert('catchError', 1500);
+            console.log(`Error of setting last level alert`)
+        }
+    }
+
+    async buttonBonusEnable() {
+        try {
+            let bonus = document.getElementById("bonus");
+            let currentLevel = await this.trackerModel.getUserLevelInfo(decodeToken().id_user);
+            if (currentLevel && currentLevel.id_level === 8) {
+                bonus.classList.remove("disabled");
+                document.getElementById("nextLevel").setAttribute("disabled", "disabled");
+            }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+               Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while enabling the bonus button', error);
+        }
+    }
+
+    async buttonPageBonus() {
+        try {
+            let currentLevel = await this.trackerModel.getUserLevelInfo(decodeToken().id_user);
+            if (currentLevel && currentLevel.id_level === 8) {
+                navigate('bonus');
+            }
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while navigating to the bonus page:', error);
+        }
+    }
+
+
+    async isLevelCompleted() {
+        try {
+            const userLevel = (await this.trackerModel.getLevelUserById(decodeToken().id_user)).id_level;
+            const allLevels = await this.trackerModel.getAllLevels();
+
+            const menuItems = document.querySelectorAll('.menu__item');
+            menuItems.forEach((menuItem, index) => {
+                const levelNumber = index + 1;
+
+                if (levelNumber <= userLevel) {
+                    menuItem.removeAttribute('disabled');
+                } else {
+                    menuItem.setAttribute('disabled', true);
+                }
+
+                const menuItemName = menuItem.textContent;
+                const matchingLevel = allLevels.find(level => level.name_level === menuItemName);
+
+                if (matchingLevel && matchingLevel.id_level <= userLevel) {
+                    menuItem.removeAttribute('disabled');
+                } else {
+                    menuItem.setAttribute('disabled', true);
                 }
             });
-        });
-
-        document.querySelector('.nextLevel').addEventListener('click', async () => {
-            const totalNumberOfCheckBox = document.querySelectorAll('.check').length;
-
-            const numberOfChecked = document.querySelectorAll('.check:checked').length;
-            if (numberOfChecked === totalNumberOfCheckBox) {
-                const userLevel = await this.trackerModel.getLevelUserId(decodeToken().id_user);
-               // const newLevel = userLevel.id_level + 1;
-                await this.trackerModel.updateLevel(decodeToken().id_user); //newLevel);
-                await this.trackerModel.updateTask(decodeToken().id_user);
-                console.log('Next level unlocked!');
-            } else {
-                console.log('Please complete all tasks before unlocking the next level.');
-            }
-        });
-
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+              Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('Error occurred while checking if the 8 level is completed', error);
+        }
     }
 
 
+    async barMenu() {
+        try {
+            let allLevels = await this.trackerModel.getAllLevels();
+            const menuBox = document.querySelector('.menu__box');
+            allLevels.forEach((level) => {
+                const menuItem = document.createElement('li');
+                const menuLink = document.createElement('a');
+                menuLink.classList.add('menu__item');
+                menuLink.textContent = level.name_level;
+                menuItem.appendChild(menuLink);
+                menuBox.appendChild(menuItem);
+            });
 
-    //AIzaSyDrR0um2oFxgbiSNdgCbir4cG08LvzhHMM
-    //AIzaSyDrR0um2oFxgbiSNdgCbir4cG08LvzhHMM
-
-    // select the button element
-  //  const button = document.querySelector('#get-events');
-
-// add an event listener to the button for click event
-//     button.addEventListener('click', () => {
-//     // make an API request to retrieve events
-//     fetch('/api/calendar/events')
-// .then(response => response.json())
-// .then(data => {
-//     // display the events in the front-end
-//     const eventList = document.querySelector('#event-list');
-//     eventList.innerHTML = '';
-//     data.forEach(event => {
-//     const eventItem = document.createElement('li');
-//     eventItem.innerText = `${event.start.dateTime} - ${event.summary}`;
-//     eventList.appendChild(eventItem);
-// });
-// })
-// .catch(error => console.error(error));
-// });
+            const logoItem = document.createElement('li');
+            const logoLink = document.createElement('a');
+            const logoImg = document.createElement('img');
+            logoLink.classList.add('img__item');
+            logoImg.src = 'https://www.hebergeur-image.com/upload/86.221.48.88-6478824be637e.png';
+            logoImg.height = '60';
+            logoImg.width = '60';
+            logoImg.classList.add('logo');
+            logoLink.appendChild(logoImg);
+            logoItem.appendChild(logoLink);
+            menuBox.appendChild(logoItem);
+        } catch (error) {
+            document.getElementById('catchError').innerHTML = `<div class="alert my-alert-danger" role="alert">
+               Une erreur est survenue
+      </div>`;
+            this.setTimeoutAlert('catchError', 1500);
+            console.error('An error occurred while setting the menu bar', error);
+        }
+    }
 
 
-// <ul id="event-list"></ul>
-// <button id="get-events" onClick="getCalendarEvents()">Get Events</button>
-// <script>
-// function getCalendarEvents() {
-//     fetch('/api/calendar/events').then(response => response.json())
-// .then(data => { const eventList = document.querySelector('#event-list');
-//     eventList.innerHTML = '';
-//     data.forEach(event => { const eventItem = document.createElement('li');
-//     eventItem.innerText = `${event.start.dateTime} - ${event.summary}`;
-//     eventList.appendChild(eventItem);
-// }
-// )
-// ;
-// })
-// .catch(error => console.error(error));
-// }
-// </script>
+    toggleDarkMode() {
+         const lightSwitch = document.getElementById('lightSwitch');
+         const body = document.body;
+         const tables = document.querySelectorAll('table');
+
+         function applyDarkMode() {
+             document.querySelectorAll('.bg-light').forEach((element) => {
+                 element.style.backgroundColor = 'rgba(57, 2, 98, 0.85)';
+             });
+
+             document.querySelectorAll('.link-dark').forEach((element) => {
+                 element.classList.remove('link-dark');
+                 element.classList.add('text-white');
+             });
+
+             body.style.backgroundColor = 'rgba(57, 2, 98, 0.85)';
+
+             body.style.color = 'black';
+
+             tables.forEach((table) => {
+                 table.classList.add('table-dark');
+             });
+
+             if (!lightSwitch.checked) {
+                 lightSwitch.checked = true;
+             }
+
+             localStorage.setItem('lightSwitch', 'dark');
+         }
+
+         function applyLightMode() {
+             document.querySelectorAll('.bg-light').forEach((element) => {
+                 element.style.backgroundColor = '';
+             });
+
+             document.querySelectorAll('.text-white').forEach((element) => {
+                 element.classList.remove('text-white');
+                 element.classList.add('link-dark');
+             });
+
+             body.style.backgroundColor = '';
+
+             body.style.color = '';
+
+             tables.forEach((table) => {
+                 table.classList.remove('table-dark');
+             });
+
+             if (lightSwitch.checked) {
+                 lightSwitch.checked = false;
+             }
+
+             localStorage.setItem('lightSwitch', 'light');
+         }
+
+         function onToggleMode() {
+             if (lightSwitch.checked) {
+                 applyDarkMode();
+             } else {
+                 applyLightMode();
+             }
+         }
+
+         function getSystemDefaultTheme() {
+             const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
+             if (darkThemeMq.matches) {
+                 return 'dark';
+             }
+             return 'light';
+         }
+
+         function setup() {
+             const settings = localStorage.getItem('lightSwitch');
+             if (settings === null) {
+                 const defaultTheme = getSystemDefaultTheme();
+                 lightSwitch.checked = defaultTheme === 'dark';
+                 if (defaultTheme === 'dark') {
+                     applyDarkMode();
+                 } else {
+                     applyLightMode();
+                 }
+             } else {
+                 lightSwitch.checked = settings === 'dark';
+                 if (settings === 'dark') {
+                     applyDarkMode();
+                 } else {
+                     applyLightMode();
+                 }
+             }
+
+             lightSwitch.addEventListener('change', onToggleMode);
+         }
+
+         setup();
+     }
 }
 
 export default () => window.HomePageController = new HomePageController()

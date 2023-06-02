@@ -5,27 +5,65 @@ import trackerModel from "../model/tracker.js";
     constructor() {
         super();
         this.trackerModel = new trackerModel();
+        this.createdDone();
+        this.serverError();
+        this.expiredToken();
 
-        if(window.displayDone){
-            this.createdDone();
-        }
-        if (sessionStorage.getItem("token")) {
-            this.userInfo();
-        }
         this.elements = {
             email: document.getElementById('email'),
             password: document.getElementById('password'),
-            valid1: document.getElementById('valid1'),
-            valid2: document.getElementById('valid2')
+            valid1: document.getElementById('validEmail'),
+            valid2: document.getElementById('validPassword')
         };
 
+        if (sessionStorage.getItem("token")){
+            if (this.isTokenValidLogin()) {
+                this.isConnected();
+            }
+        }
     }
 
+     async isTokenValidLogin() {
+        try {
+            if (sessionStorage.getItem("token")) {
+                let jwt = sessionStorage.getItem("token")
+                let jwtdecode = decodeToken(jwt)
+                if (jwtdecode.exp <= Math.floor(Date.now() / 1000)) {
+                    sessionStorage.removeItem("token")
+                    return false
+                } else {
+                    let new_token = await this.model.refreshToken(decodeToken().id_user)
+                    sessionStorage.removeItem("token")
+                    sessionStorage.setItem("token", new_token.token)
+                    return true
+                }
+            }
+            return false
+        } catch (e) {
+            return false
+        }
+     }
+
+     async isConnected() {
+         navigate("homePage")
+     }
+
+     logOut() {
+         sessionStorage.removeItem("token")
+         navigate("login")
+     }
+
     createdDone(){
-        let alert = document.getElementById('alert')
-        alert.innerHTML = `<div class="alert alert-primary" role="alert">
-    Votre compte a été créé avec succès
-    </div>`
+        let checkUser = localStorage.getItem('isRegistered')
+
+        if (checkUser) {
+            let alert = document.getElementById('alert')
+            alert.innerHTML = `<div class="alert my-alert-sucess" role="alert">
+                                    Votre compte a été créé avec succès
+                               </div>`
+            this.setTimeoutAlert('alert', 1500);
+        }
+        localStorage.removeItem('isRegistered')
     }
 
     async getLogin(){
@@ -35,30 +73,77 @@ import trackerModel from "../model/tracker.js";
         } = this.elements;
         let data = { "email" : email.value, "password" : password.value}
         try {
-            this.validation()
-            let token = await this.trackerModel.getTracker(data)
-            sessionStorage.setItem('token', token.token)
-            navigate ('homePage');
-        } catch (e){
-            document.getElementById("loginError").innerHTML = `<div class="alert alert-danger" role="alert">
+            let boolean = this.validation()
+            if(boolean === true) {
+                let token = await this.trackerModel.getLogin(data)
+                localStorage.setItem('login', "true")
+                sessionStorage.setItem('token', token.token)
+                navigate('homePage');
+            } else {
+                document.getElementById("loginError").innerHTML = `<div class="alert my-alert-danger" role="alert">
                                                                     Votre e-mail et votre mot de passe ne correspondent pas 
                                                                 </div>`
-            Object.values(this.elements).forEach(element => {
-                element.classList.remove('is-valid');
-                element.classList.add('is-invalid');
-            });
+                document.getElementById("loginError").style.display = "block";
+                this.setTimeoutAlert('loginError', 1500);
+                Object.values(this.elements).forEach(element => {
+                    element.classList.remove('is-valid');
+                    element.classList.add('is-invalid');
+                });
+            }
+        } catch (error){
+            if (error.message === `401`) {
+
+                Object.values(this.elements).forEach(element => {
+                    element.classList.remove('is-valid');
+                    element.classList.add('is-invalid');
+                });
+
+                document.getElementById("loginError").innerHTML = `<div class="alert my-alert-danger" role="alert">
+                                                                    Votre e-mail ou votre mot de passe est incorrect.
+                                                                </div>`
+                document.getElementById("loginError").style.display = "block";
+                this.setTimeoutAlert('loginError', 1500);
+
+            } else {
+
+                Object.values(this.elements).forEach(element => {
+                    element.classList.remove('is-valid');
+                    element.classList.add('is-invalid');
+                });
+
+                document.getElementById("loginError").innerHTML = `<div class="alert my-alert-danger" role="alert">
+                                                                   Votre e-mail ou votre mot de passe est incorrect.
+                                                                </div>`
+                document.getElementById("loginError").style.display = "block";
+                this.setTimeoutAlert('loginError', 1500);
+
+            }
         }
     }
 
-    async userInfo(){
-        try {
-            await this.trackerModel.getUserInfo(decodeToken().id_user)
-        } catch (e) {
-            console.log(e)
+    serverError(){
+        let alertError = document.getElementById('serverError')
+        if(localStorage.getItem('server error')) {
+            localStorage.removeItem('server error')
+            alertError.innerHTML = `<div class="alert my-alert-danger" role="alert">
+                Erreur Serveur
+            </div>`;
+            this.setTimeoutAlert('serverError', 2500);
         }
-        // ${userinfo.nickname}
-        // ${userinfo.age}
+
     }
+
+    expiredToken(){
+        let alertToken = document.getElementById('tokenAlert')
+        if(localStorage.getItem('expiredToken')) {
+            localStorage.removeItem('expiredToken')
+            alertToken.innerHTML = `<div class="alert my-alert-sucess" role="alert">
+                                                                    Votre session est expiré
+                                                                </div>`
+            this.setTimeoutAlert('tokenAlert', 2000);
+        }
+    }
+
 
     validation() {
         const {
@@ -71,10 +156,22 @@ import trackerModel from "../model/tracker.js";
 
         let boolean = true;
 
-        if (email.value.length < 2) {
+        if(!email.value.match(emailFormat)) {
+            email.classList.add('is-valid')
+            email.classList.add('is-invalid')
+            valid1.innerHTML = `<h5 style="color: red; font-size: 12px">Votre email a incorrect value<h5/>`
+            boolean = false
+
+        } else{
+            email.classList.add('is-valid')
+            email.classList.remove('is-invalid')
+            valid1.innerHTML = ``
+        }
+
+        if (email.value.length < 8) {
             email.classList.remove('is-valid')
             email.classList.add('is-invalid')
-            valid1.innerHTML = `<h5 style="color: red; font-size: 12px">Incorrect value (minimum 2 caractères)<h5/>`
+            valid1.innerHTML = `<h5 style="color: red; font-size: 12px">Incorrect value (minimum 8 caractères)<h5/>`
             boolean = false
 
         } else {
@@ -93,18 +190,6 @@ import trackerModel from "../model/tracker.js";
             password.classList.add('is-valid')
             password.classList.remove('is-invalid')
             valid2.innerHTML = ``
-        }
-
-        if(!email.value.match(emailFormat)) {
-            email.classList.add('is-valid')
-            email.classList.add('is-invalid')
-            valid1.innerHTML = `<h5 style="color: red; font-size: 12px">Votre email a incorrect value<h5/>`
-            boolean = false
-
-        } else{
-            email.classList.add('is-valid')
-            email.classList.remove('is-invalid')
-            valid1.innerHTML = ``
         }
 
         return boolean
