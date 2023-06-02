@@ -3,9 +3,6 @@ body{
     /*background-color: rgba(10, 211, 211, 0.3);*/
 }
 
-body.dark-mode{
-    background-color: rgba(10, 211, 211, 0.3);
-}
 
 .navBar{
 background-color: #7e57c2;
@@ -315,6 +312,7 @@ input[type=checkbox] {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 30px;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -378,6 +376,7 @@ input[type=checkbox] {
 
 .infoModal.btn {
     margin-left: 10px !important;
+    margin-right: 15px;
     color: white !important;
     border: none !important;
     transition: background-color 0.3s, color 0.3s;
